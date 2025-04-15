@@ -54,7 +54,7 @@ const sections = [
     },
 ];
 
-const Home = () => {
+const MyHistory = () => {
     const theme = useTheme();
 
     const getDirectDropboxUrl = (url) => {
@@ -146,4 +146,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default MyHistory;

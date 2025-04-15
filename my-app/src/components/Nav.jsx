@@ -12,18 +12,17 @@ const Nav = () => {
           color: 'inherit',
           borderBottom: isActive ? '2px solid #FFF' : 'none',
         })}
-      >
-        Home
+      >Mi historia
       </Button>
       <Button
         component={NavLink}
-        to="/gallery"
+        to="/product"
         sx={({ isActive }) => ({
           color: 'inherit',
           borderBottom: isActive ? '2px solid #FFF' : 'none',
         })}
       >
-        Gallery
+        Producto
       </Button>
     </Stack>
   );

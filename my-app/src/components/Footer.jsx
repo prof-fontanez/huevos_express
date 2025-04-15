@@ -10,7 +10,7 @@ const Footer = () => {
                 color: 'primary.contrastText',
                 textAlign: 'center',
                 py: 3,
-                mt: 5,
+                mt: 2,
             }}
         >
             <Typography variant="body1">

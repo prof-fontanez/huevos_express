@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import Gallery from './pages/Gallery';
+import MyHistory from './pages/MyHistory';
+import Product from './pages/Product';
 import Layout from './components/Layout';
 
 function App() {
@@ -8,8 +8,8 @@ function App() {
     <>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/product" element={<Product />} />
+          <Route path="/" element={<MyHistory />} />
         </Route>
       </Routes>
     </>

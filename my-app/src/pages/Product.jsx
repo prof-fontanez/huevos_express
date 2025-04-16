@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Fade from '@mui/material/Fade';
 import {
     Grid,
     Card,
@@ -11,7 +12,10 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
-    Button
+    DialogActions,
+    Button,
+    useMediaQuery,
+    useTheme
 } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import EmbeddedReviews from '../components/EmbeddedReviews';
@@ -19,21 +23,21 @@ import EmbeddedReviews from '../components/EmbeddedReviews';
 const products = [
     {
         id: 1,
-        imageUrl: 'https://pavaotogo.com/wp-content/uploads/2020/05/Pavao-Meats-Groceries-30-Egg-Carton.jpg',
+        imageUrl: 'carton30.jpg',
         title: 'Cartón de 30 huevos',
         description: 'Precios pueden variar diariamente',
         price: '$20'
     },
     {
         id: 2,
-        imageUrl: 'https://www.farmtek.com/media/catalog/product/cache/f9d76ab52b9381a4c660f4521b58327f/1/1/117760b.jpg',
+        imageUrl: '18x2.jpg',
         title: 'Paquete de 18 huevos',
         description: 'Precios pueden variar diariamente',
         price: '$13 (2 x $25)'
     },
     {
         id: 3,
-        imageUrl: 'https://pavaotogo.com/wp-content/uploads/2020/05/Pavao-Meats-Groceries-30-Egg-Carton.jpg',
+        imageUrl: 'cartones.jpg',
         title: 'Descuento si compra en cantidades',
         description: 'Con entrega a pueblos limítrofes.'
     },
@@ -41,8 +45,14 @@ const products = [
 
 const Product = () => {
     const [qrOpen, setQrOpen] = useState(false);
+    const [infoOpen, setInfoOpen] = useState(false);
     const handleQrOpen = () => setQrOpen(true);
     const handleQrClose = () => setQrOpen(false);
+    const handleInfoOpen = () => setInfoOpen(true);
+    const handleInfoClose = () => setInfoOpen(false);
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
         <Box
@@ -63,7 +73,8 @@ const Product = () => {
                         <Grid
                             key={product.id}
                             size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
-                            sx={{ display: 'flex', justifyContent: 'center' }}                        >
+                            sx={{ display: 'flex', justifyContent: 'center' }}
+                        >
                             <Card
                                 sx={{
                                     width: 300,
@@ -115,11 +126,39 @@ const Product = () => {
                                             {product.description}
                                         </Typography>
                                         {index === products.length - 1 && (
-                                            <Tooltip title="Aplica a compras por caja o más. Contáctenos para más detalles.">
-                                                <IconButton size="small">
-                                                    <InfoOutlinedIcon fontSize="small" />
-                                                </IconButton>
-                                            </Tooltip>
+                                            isMobile ? (
+                                                <>
+                                                    <IconButton size="small" onClick={handleInfoOpen}>
+                                                        <InfoOutlinedIcon fontSize="small" />
+                                                    </IconButton>
+                                                    <Dialog open={infoOpen} onClose={handleInfoClose}>
+                                                        <DialogTitle>Información</DialogTitle>
+                                                        <DialogContent>
+                                                            Aplica a compras por caja o más. Contáctenos para más detalles.
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button onClick={handleInfoClose}>Cerrar</Button>
+                                                        </DialogActions>
+                                                    </Dialog>
+                                                </>
+                                            ) : (
+                                                <Tooltip
+                                                    title="Aplica a compras por caja o más. Contáctenos para más detalles."
+                                                    TransitionComponent={Fade}
+                                                    TransitionProps={{ timeout: 300 }}
+                                                    PopperProps={{
+                                                        modifiers: [
+                                                            { name: 'preventOverflow', options: { boundary: 'viewport' } },
+                                                            { name: 'offset', options: { offset: [0, 8] } },
+                                                            { name: 'flip', options: { enabled: true } },
+                                                        ],
+                                                    }}
+                                                >
+                                                    <IconButton size="small">
+                                                        <InfoOutlinedIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            )
                                         )}
                                     </Box>
                                 </CardContent>
@@ -161,6 +200,7 @@ const Product = () => {
             <Box sx={{ mt: 4, width: '100%' }}>
                 <EmbeddedReviews />
             </Box>
+
             {/* QR Dialog */}
             <Dialog open={qrOpen} onClose={handleQrClose}>
                 <DialogTitle>Pague aquí con ATH Móvil</DialogTitle>

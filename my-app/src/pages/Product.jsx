@@ -61,17 +61,9 @@ const Product = () => {
                 <Grid container spacing={12} justifyContent="center">
                     {products.map((product, index) => (
                         <Grid
-                            item
                             key={product.id}
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={3}
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                            }}
-                        >
+                            size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+                            sx={{ display: 'flex', justifyContent: 'center' }}                        >
                             <Card
                                 sx={{
                                     width: 300,

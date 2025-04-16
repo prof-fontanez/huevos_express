@@ -15,7 +15,7 @@ const sections = [
     {
         id: 3,
         imageUrl: 'https://www.dropbox.com/scl/fi/s5iap4kdhe33z8efi826p/IMG-20250413-WA0050.jpg?rlkey=c6tjdlenwruu62a8xtv0x4dsn&st=sqazrxfe&dl=0',
-        text: 'A par de meses me mi retiro, se me ocurre una idea para seguir sirviendo a mi gente: vender algún tipo de alimento.',
+        text: 'A par de meses de mi retiro, se me ocurre una idea para seguir sirviendo a mi gente: vender algún tipo de alimento.',
     },
     {
         id: 4,

@@ -54,12 +54,8 @@ const Product = () => {
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const [businessHours, setBusinessHours] = useState([]);
+    const [, setBusinessHours] = useState([]);
 
-    const parsedBusinessHours = [
-        { days: 'Lunes a viernes', open: '4:00 PM', close: '6:00 PM' },
-        { days: 'Fines de semana', open: '11:00 AM', close: '1:00 PM' }
-    ];
     useEffect(() => {
         fetch('/business')
             .then((response) => response.json())

@@ -10,7 +10,7 @@ const Header = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box
                         component="img"
-                        src="/logo2.png"
+                        src="/logo3.png"
                         alt="Huevos Express Logo"
                         sx={{
                             height: 32,

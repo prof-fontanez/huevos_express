@@ -1,7 +1,14 @@
 // server.js
 const express = require('express');
+const cors = require('cors'); // Import CORS
 const app = express();
 const PORT = 5000;
+
+// Enable CORS
+app.use(cors());
+
+// Middleware to parse JSON bodies
+app.use(express.json());
 
 // Import the business route
 const businessRoute = require('./routes/business');

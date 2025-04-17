@@ -3,9 +3,11 @@ import React, { useEffect, useState } from 'react';
 
 function BusinessHours() {
   const [businessHours, setBusinessHours] = useState([]);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 
   useEffect(() => {
-    fetch('/business')
+    fetch(`${API_BASE_URL}/business`)
       .then((response) => response.json())
       .then((data) => setBusinessHours(data))
       .catch((error) => console.error('Error fetching business hours:', error));

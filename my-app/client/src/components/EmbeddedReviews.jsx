@@ -2,10 +2,18 @@ import React, { useEffect } from 'react';
 
 const EmbeddedReviews = () => {
     useEffect(() => {
-        const script = document.createElement('script');
-        script.src = 'https://static.elfsight.com/platform/platform.js';
-        script.async = true;
-        document.body.appendChild(script);
+        const existingScript = document.querySelector('script[src="https://static.elfsight.com/platform/platform.js"]');
+        if (!existingScript) {
+            const script = document.createElement('script');
+            script.src = 'https://static.elfsight.com/platform/platform.js';
+            script.async = true;
+            document.body.appendChild(script);
+        } else {
+            // If script already exists, manually trigger widget load
+            if (window.ELFSIGHT_PLATFORM) {
+                window.ELFSIGHT_PLATFORM.init();
+            }
+        }
     }, []);
 
     return (

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
+import SocialMedia from './SocialMedia';
 
 const Footer = () => {
     return (
@@ -13,21 +14,7 @@ const Footer = () => {
                 mt: 2,
             }}
         >
-            <Typography variant="body1">
-                Web designer: Hector Fontanez
-            </Typography>
-            <Typography variant="body1">
-                Contact info:{' '}
-                <a
-                    href="mailto:hector.fontanez@sbcglobal.net"
-                    style={{ color: 'inherit', textDecoration: 'underline' }}
-                >
-                    hector.fontanez@sbcglobal.net
-                </a>
-            </Typography>
-            <Typography variant="body2" sx={{ mt: 1 }}>
-                &copy; 2025 All rights reserved
-            </Typography>
+            <SocialMedia/>
         </Box>
     );
 };

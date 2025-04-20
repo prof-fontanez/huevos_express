@@ -3,8 +3,7 @@ import { Typography, Stack, Box } from '@mui/material';
 import FooterLinks from './FooterLinks';
 
 const socialMediaUrls = [
-    { url: 'https://twitter.com/yourbusiness', label: 'Twitter de la empresa' },
-    { url: 'https://facebook.com/yourbusiness', label: 'Facebook de la empresa' },
+     { url: 'https://facebook.com/profile.php?id=61575267457929', label: 'Facebook de Huevos Express PR' },
 ];
 
 const friendsSocialMediaUrls = [

@@ -3,7 +3,8 @@ import { Typography, Stack, Box } from '@mui/material';
 import FooterLinks from './FooterLinks';
 
 const socialMediaUrls = [
-     { url: 'https://facebook.com/profile.php?id=61575267457929', label: 'Facebook de Huevos Express PR' },
+    { url: 'https://www.instagram.com/huevosexpresspr?igsh=MXdhdG9udnh3MGt0ag%3D%3D&utm_source=qr', label: 'Instragram de Huevos Express PR' },
+    { url: 'https://facebook.com/profile.php?id=61575267457929', label: 'Facebook de Huevos Express PR' },
 ];
 
 const friendsSocialMediaUrls = [

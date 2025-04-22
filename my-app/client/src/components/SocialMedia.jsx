@@ -39,7 +39,7 @@ const SocialMedia = () => {
                 </Stack>
 
                 <Stack spacing={1} alignItems="center">
-                    <Typography variant="body2">Y a mis amigos "El Spot del Colombiano"</Typography>
+                    <Typography variant="body2">Y a mis amigos / clientes de "El Spot del Colombiano"</Typography>
                     <FooterLinks items={renderSocialIcons(friendsSocialMediaUrls)} />
                 </Stack>
             </Stack>

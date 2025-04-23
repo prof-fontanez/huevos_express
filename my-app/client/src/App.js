@@ -4,6 +4,7 @@ import Product from './pages/Product';
 import Layout from './components/Layout';
 import { useEffect } from "react";
 import { initGA, logPageView } from "./analytics";
+import MyHeroes from './pages/MyHeroes';
 
 function App() {
 
@@ -22,8 +23,9 @@ function App() {
     <>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/product" element={<Product />} />
-          <Route path="/" element={<MyHistory />} />
+        <Route path="/heroes" element={<MyHeroes />} />
+        <Route path="/product" element={<Product />} />
+        <Route path="/" element={<MyHistory />} />
         </Route>
       </Routes>
     </>

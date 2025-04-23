@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Fade from '@mui/material/Fade';
 import {
     Grid,
     Card,
@@ -7,6 +6,7 @@ import {
     CardMedia,
     Typography,
     Box,
+    Fade,
     Tooltip,
     IconButton,
     Dialog,
@@ -20,6 +20,8 @@ import {
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import EmbeddedReviews from '../components/EmbeddedReviews';
 import BusinessHours from '../components/BusinessHours';
+import OrderForm from '../components/OrderForm';
+import GoogleMapsWidget from '../components/GoogleMapsWidget';
 
 const products = [
     {
@@ -51,6 +53,10 @@ const Product = () => {
     const handleQrClose = () => setQrOpen(false);
     const handleInfoOpen = () => setInfoOpen(true);
     const handleInfoClose = () => setInfoOpen(false);
+
+    const [openForm, setOpenForm] = useState(false);
+    const handleOpenForm = () => setOpenForm(true);
+    const handleCloseForm = () => setOpenForm(false);
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -156,21 +162,22 @@ const Product = () => {
                                             ) : (
                                                 <Tooltip
                                                     title="Aplica a compras por caja o más. Contáctenos para más detalles."
-                                                    TransitionComponent={Fade}
-                                                    TransitionProps={{ timeout: 300 }}
-                                                    PopperProps={{
-                                                        modifiers: [
-                                                            { name: 'preventOverflow', options: { boundary: 'viewport' } },
-                                                            { name: 'offset', options: { offset: [0, 8] } },
-                                                            { name: 'flip', options: { enabled: true } },
-                                                        ],
+                                                    slots={{ transition: Fade }}
+                                                    slotProps={{
+                                                        transition: { timeout: 300 },
+                                                        popper: {
+                                                            modifiers: [
+                                                                { name: 'preventOverflow', options: { boundary: 'viewport' } },
+                                                                { name: 'offset', options: { offset: [0, 8] } },
+                                                                { name: 'flip', options: { enabled: true } },
+                                                            ],
+                                                        },
                                                     }}
                                                 >
                                                     <IconButton size="small">
                                                         <InfoOutlinedIcon fontSize="small" />
                                                     </IconButton>
-                                                </Tooltip>
-                                            )
+                                                </Tooltip>)
                                         )}
                                     </Box>
                                 </CardContent>
@@ -208,6 +215,12 @@ const Product = () => {
                 </Button>
             </Box>
 
+            {/* Order Form */}
+            <Box sx={{ textAlign: 'center', mt: 1 }}>
+                <Typography variant='h6'>Ordenes por caja</Typography>
+                <OrderForm />
+            </Box>
+
             {/* Business Hours Section */}
             <Box sx={{ textAlign: 'center', mt: 1 }}>
                 <BusinessHours />
@@ -215,6 +228,10 @@ const Product = () => {
             {/* Review Carousel Section */}
             <Box sx={{ mt: 1, width: '100%' }}>
                 <EmbeddedReviews />
+            </Box>
+
+            <Box sx={{ mt: 1, width: '50%'}}>
+                <GoogleMapsWidget />
             </Box>
 
             {/* QR Dialog */}

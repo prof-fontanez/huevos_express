@@ -17,17 +17,17 @@ const itemData = [
     {
         img: './hero/20250419_123150.jpg',
         name: 'Mr. Brent Rhea',
-        description: 'Cliente de Cataño',
+        description: 'Amigo y cliente de Cataño',
     },
     {
         img: './hero/IMG-20250415-WA0080.jpg',
-        name: '',
-        description: '',
+        name: 'Jannette Crespo',
+        description: 'Enfermera Escolar JSA',
     },
     {
         img: './hero/IMG-20250415-WA0081.jpg',
-        name: '',
-        description: '',
+        name: 'José Colón',
+        description: 'Paramédico Estatal, Manatí',
     },
     {
         img: './hero/IMG-20250416-WA0018.jpg',
@@ -44,6 +44,22 @@ const itemData = [
         name: '',
         description: '',
     },
+    {
+        img: './hero/IMG-20250423-WA0016.jpg',
+        name: 'Nicauris Cristian',
+        description: '',
+    },
+    {
+        img: './hero/IMG-20250423-WA0021.jpg',
+        name: '',
+        description: '',
+    },
+    {
+        img: './hero/IMG-20250423-WA0022.jpg',
+        name: 'Ismael Colón',
+        description: 'Perito Electricista',
+    },
+    
  ];
 
 const HeroesGallery = () => {

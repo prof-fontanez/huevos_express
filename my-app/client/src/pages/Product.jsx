@@ -75,8 +75,7 @@ const Product = () => {
     return (
         <Box
             sx={{
-                height: '60vh', // Full viewport height
-                maxWidth: '1200px',
+                minHeight: 'calc(78vh - 126px)',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',

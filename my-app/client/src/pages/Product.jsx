@@ -75,12 +75,13 @@ const Product = () => {
     return (
         <Box
             sx={{
-                maxWidth: '1200px',
-                margin: '0 auto',
-                p: 2,
-                height: '60vh', // Full viewport height
+                minHeight: 'calc(78vh - 126px)',
                 display: 'flex',
                 flexDirection: 'column',
+                alignItems: 'center',
+                px: { xs: 2, md: 4 },
+                py: 4,
+                gap: 6,
             }}
         >
             {/* Product Grid Section */}
@@ -229,7 +230,7 @@ const Product = () => {
                 <EmbeddedReviews />
             </Box>
 
-            <Box sx={{ mt: 1, width: '50%' }}>
+            <Box sx={{ mt: 1, width: '50%'}}>
                 <GoogleMapsWidget />
             </Box>
 

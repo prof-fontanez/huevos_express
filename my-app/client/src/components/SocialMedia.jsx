@@ -43,19 +43,6 @@ const SocialMedia = () => {
                     <FooterLinks items={renderSocialIcons(friendsSocialMediaUrls)} />
                 </Stack>
             </Stack>
-
-            <Typography
-                variant="body2"
-                sx={{ marginTop: 2, textAlign: 'center' }}
-            >
-                ¿Problemas? Contacta nuestro diseñador web:{' '}
-                <a
-                    href="mailto:hector.fontanez@sbcglobal.net"
-                    style={{ color: 'inherit', textDecoration: 'underline' }}
-                >
-                    hector.fontanez@sbcglobal.net
-                </a>
-            </Typography>
         </Box>
     );
 };

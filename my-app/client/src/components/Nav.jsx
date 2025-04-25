@@ -1,44 +1,83 @@
-import React from 'react';
-import { Button, Stack } from '@mui/material';
+import React, { useState } from 'react';
+import {
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import { NavLink } from 'react-router-dom';
 
+const navLinks = [
+  { label: 'Historia', path: '/' },
+  { label: 'Producto', path: '/product' },
+  // Add more links as needed
+];
+
 const Nav = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <Stack
-      direction={{ xs: 'column', sm: 'row' }}
-      spacing={{ xs: 1, sm: 2 }}
-      sx={{
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-      }}
-    >
-      <Button
-        component={NavLink}
-        to="/"
-        sx={({ isActive }) => ({
-          color: 'inherit',
-          borderBottom: isActive ? '2px solid #FFF' : 'none',
-          width: { xs: '100%', sm: 'auto' },
-          textAlign: 'center',
-        })}
+    <>
+      {/* Hamburger Icon */}
+      <IconButton
+        edge="start"
+        color="inherit"
+        aria-label="menu"
+        onClick={handleMenuClick}
       >
-        Mi historia
-      </Button>
-      <Button
-        component={NavLink}
-        to="/product"
-        sx={({ isActive }) => ({
-          color: 'inherit',
-          borderBottom: isActive ? '2px solid #FFF' : 'none',
-          width: { xs: '100%', sm: 'auto' },
-          textAlign: 'center',
-        })}
+        <MenuIcon />
+      </IconButton>
+
+      {/* Floating Menu */}
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        slotProps={{
+          list: {
+            'aria-labelledby': 'basic-button',
+          },
+        }}
       >
-        Producto
-      </Button>
-    </Stack>
+        {navLinks.map((link) => (
+          <MenuItem
+            key={link.path}
+            component={NavLink}
+            to={link.path}
+            onClick={handleClose}
+            sx={{
+              '&.active': {
+                fontWeight: 'bold',
+                textDecoration: 'underline',
+                color: 'text.primary',
+              },
+              color: 'text.secondary',
+              fontFamily: 'Roboto, Arial, sans-serif'
+            }}
+          >
+              {link.label}
+          </MenuItem>
+        ))}
+      </Menu>
+    </>
   );
 };
 

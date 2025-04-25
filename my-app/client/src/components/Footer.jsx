@@ -1,6 +1,8 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import SocialMedia from './SocialMedia';
+import WebmasterInfo from './WebmasterInfo';
+import CommercialLicense from './CommercialLicense';
 
 const Footer = () => {
     return (
@@ -15,6 +17,8 @@ const Footer = () => {
             }}
         >
             <SocialMedia/>
+            <CommercialLicense />
+            <WebmasterInfo />
         </Box>
     );
 };

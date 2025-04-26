@@ -90,7 +90,7 @@ const Product = () => {
                     {products.map((product, index) => (
                         <Grid
                             key={product.id}
-                            size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+                            item xs={12} sm={6} md={4} lg={3}
                             sx={{ display: 'flex', justifyContent: 'center' }}
                         >
                             <Card

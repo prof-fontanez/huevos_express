@@ -64,85 +64,83 @@ const MyHistory = () => {
     };
 
     return (
-        <>
+        <Box
+            sx={{
+                maxWidth: '1200px',
+                margin: '0 auto',
+                p: 2,
+                height: '60vh', // Full viewport height
+                display: 'flex',
+                flexDirection: 'column',
+            }}
+        >
             <Typography variant="h2">Mi Historia</Typography>
+            {/* Scrollable Content Container */}
             <Box
                 sx={{
-                    maxWidth: '1200px',
-                    margin: '0 auto',
-                    p: 2,
-                    height: '60vh', // Full viewport height
-                    display: 'flex',
-                    flexDirection: 'column',
+                    overflowY: 'auto', // Makes the content scrollable
+                    flex: 1, // Allows this area to grow and fill the available space
+                    paddingBottom: '50px', // To ensure there's no overlap with footer
                 }}
             >
-                {/* Scrollable Content Container */}
-                <Box
-                    sx={{
-                        overflowY: 'auto', // Makes the content scrollable
-                        flex: 1, // Allows this area to grow and fill the available space
-                        paddingBottom: '50px', // To ensure there's no overlap with footer
-                    }}
-                >
-                    {sections.map((section, index) => {
-                        const isEven = index % 2 === 1;
+                {sections.map((section, index) => {
+                    const isEven = index % 2 === 1;
 
-                        return (
+                    return (
+                        <Box
+                            key={section.id}
+                            sx={{
+                                display: 'flex',
+                                flexDirection: {
+                                    xs: 'column',
+                                    md: isEven ? 'row-reverse' : 'row',
+                                },
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                mb: 4,
+                                gap: 2,
+                            }}
+                        >
                             <Box
-                                key={section.id}
                                 sx={{
+                                    width: { xs: '100%', md: '50%' },
                                     display: 'flex',
-                                    flexDirection: {
-                                        xs: 'column',
-                                        md: isEven ? 'row-reverse' : 'row',
-                                    },
-                                    alignItems: 'center',
                                     justifyContent: 'center',
-                                    mb: 4,
-                                    gap: 2,
+                                    alignItems: 'center',
+                                    p: 2,
                                 }}
                             >
                                 <Box
+                                    component="img"
+                                    src={getDirectDropboxUrl(section.imageUrl)}
+                                    alt={`Section ${section.id}`}
                                     sx={{
-                                        width: { xs: '100%', md: '50%' },
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        p: 2,
-                                    }}
-                                >
-                                    <Box
-                                        component="img"
-                                        src={getDirectDropboxUrl(section.imageUrl)}
-                                        alt={`Section ${section.id}`}
-                                        sx={{
-                                            maxWidth: '100%',
-                                            maxHeight: 400,
-                                            width: 'auto',
-                                            height: 'auto',
-                                            objectFit: 'contain',
-                                            borderRadius: 2,
-                                        }}
-                                    />
-                                </Box>
-
-                                <Box
-                                    sx={{
-                                        width: { xs: '100%', md: '50%' },
-                                        p: 3,
-                                        bgcolor: 'rgba(0, 0, 0, 0.05)',
+                                        maxWidth: '100%',
+                                        maxHeight: 400,
+                                        width: 'auto',
+                                        height: 'auto',
+                                        objectFit: 'contain',
                                         borderRadius: 2,
-                                        textAlign: 'center',
                                     }}
-                                >
-                                    <Typography variant="body1">{section.text}</Typography>
-                                </Box>
+                                />
                             </Box>
-                        );
-                    })}
-                </Box>
+
+                            <Box
+                                sx={{
+                                    width: { xs: '100%', md: '50%' },
+                                    p: 3,
+                                    bgcolor: 'rgba(0, 0, 0, 0.05)',
+                                    borderRadius: 2,
+                                    textAlign: 'center',
+                                }}
+                            >
+                                <Typography variant="body1">{section.text}</Typography>
+                            </Box>
+                        </Box>
+                    );
+                })}
             </Box>
-        </>
+        </Box>
     );
 };
 

@@ -11,6 +11,7 @@ import { NavLink } from 'react-router-dom';
 const navLinks = [
   { label: 'Historia', path: '/' },
   { label: 'Producto', path: '/product' },
+  { label: 'Héroes', path: '/heroes'},
   // Add more links as needed
 ];
 

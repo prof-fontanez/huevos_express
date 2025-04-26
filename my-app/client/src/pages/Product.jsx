@@ -225,13 +225,14 @@ const Product = () => {
             <Box sx={{ textAlign: 'center', mt: 1 }}>
                 <BusinessHours />
             </Box>
-            {/* Review Carousel Section */}
-            <Box sx={{ mt: 1, width: '100%' }}>
-                <EmbeddedReviews />
-            </Box>
 
             <Box sx={{ mt: 1, width: '50%'}}>
                 <GoogleMapsWidget />
+            </Box>
+
+            {/* Review Carousel Section */}
+            <Box sx={{ mt: 1, width: '100%' }}>
+                <EmbeddedReviews />
             </Box>
 
             {/* QR Dialog */}

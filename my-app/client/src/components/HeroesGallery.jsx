@@ -11,9 +11,9 @@ import {
 
 const itemData = [
     {
-        img: './hero/20250419_113516.jpg',
-        name: 'Héctor Fontánez',
-        description: 'Desarollador de la página',
+        img: './hero/IMG-20250421-WA0010.jpg',
+        name: 'Aida, Javier, y Joel',
+        description: 'Esposa y cuñados siempre ayudando en todo.',
     },
     {
         img: './hero/20250419_123150.jpg',
@@ -37,13 +37,8 @@ const itemData = [
     },
     {
         img: './hero/IMG-20250419-WA0018.jpg',
-        name: '',
+        name: 'Mayté y César',
         description: 'El Spot del Colombiano',
-    },
-    {
-        img: './hero/IMG-20250419-WA0037.jpg',
-        name: 'Frankie',
-        description: '',
     },
     {
         img: './hero/IMG-20250423-WA0016.jpg',

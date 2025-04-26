@@ -86,7 +86,7 @@ const Product = () => {
         >
             {/* Product Grid Section */}
             <Box sx={{ width: '100%' }}>
-                <Grid container spacing={12} justifyContent="center">
+                <Grid container spacing={2} justifyContent="center">
                     {products.map((product, index) => (
                         <Grid
                             key={product.id}
@@ -95,7 +95,7 @@ const Product = () => {
                         >
                             <Card
                                 sx={{
-                                    width: 300,
+                                    width: { xs: 280, sm: 300 },
                                     height: 300,
                                     display: 'flex',
                                     flexDirection: 'column',
@@ -177,7 +177,8 @@ const Product = () => {
                                                     <IconButton size="small">
                                                         <InfoOutlinedIcon fontSize="small" />
                                                     </IconButton>
-                                                </Tooltip>)
+                                                </Tooltip>
+                                            )
                                         )}
                                     </Box>
                                 </CardContent>
@@ -226,7 +227,8 @@ const Product = () => {
                 <BusinessHours />
             </Box>
 
-            <Box sx={{ mt: 1, width: '50%'}}>
+            {/* Google Maps Section */}
+            <Box sx={{ mt: 1, width: { xs: '100%', md: '50%' } }}>
                 <GoogleMapsWidget />
             </Box>
 

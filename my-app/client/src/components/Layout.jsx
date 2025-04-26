@@ -7,13 +7,17 @@ const Layout = () => {
     return (
         <>
             {/* Global fix for scrollbar shift */}
-            <GlobalStyles styles={{ html: { overflowY: 'scroll' } }} />
+            <GlobalStyles styles={{
+                html: { overflowY: 'scroll' },
+                body: { overflowX: 'hidden' }
+            }} />
 
             <Box
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     minHeight: '100vh', // full screen height
+                    overflowX: 'hidden',
                 }}
             >
                 <Header />
@@ -23,6 +27,7 @@ const Layout = () => {
                         flexGrow: 1, // expands to fill available space
                         px: 2,
                         py: 4,
+                        overflowX: 'hidden', // optional double protection
                     }}
                 >
                     <Outlet />

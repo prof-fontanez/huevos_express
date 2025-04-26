@@ -1,30 +1,35 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import { Outlet } from "react-router-dom";
-import { Box } from '@mui/material';
+import { Box, GlobalStyles } from '@mui/material'; // <--- Import GlobalStyles
 
 const Layout = () => {
     return (
-        <Box
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                minHeight: '100vh', // full screen height
-            }}
-        >
-            <Header />
+        <>
+            {/* Global fix for scrollbar shift */}
+            <GlobalStyles styles={{ html: { overflowY: 'scroll' } }} />
+
             <Box
-                component="main"
                 sx={{
-                    flexGrow: 1, // expands to fill available space
-                    px: 2,
-                    py: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: '100vh', // full screen height
                 }}
             >
-                <Outlet />
+                <Header />
+                <Box
+                    component="main"
+                    sx={{
+                        flexGrow: 1, // expands to fill available space
+                        px: 2,
+                        py: 4,
+                    }}
+                >
+                    <Outlet />
+                </Box>
+                <Footer />
             </Box>
-            <Footer />
-        </Box>
+        </>
     );
 };
 

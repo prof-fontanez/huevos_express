@@ -20,18 +20,6 @@ import {
 import { styled } from '@mui/system';
 import emailjs from '@emailjs/browser';
 
-const StyledBox = styled(Box)(({ theme }) => ({
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    boxShadow: 24,
-    padding: theme.spacing(4),
-}));
-
 const OrderForm = () => {
     const [errors, setErrors] = useState({});
     const [confirmationOpen, setConfirmationOpen] = useState(false);
@@ -121,7 +109,35 @@ const OrderForm = () => {
                 Forma de pedido
             </Button>
             <Modal open={open} onClose={handleCancel}>
-                <StyledBox>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '95%', // Set to 95% of the parent width
+                        maxWidth: 400, // Max width for larger screens
+                        minWidth: 280, // Min width for smaller screens
+                        maxHeight: '95vh', // Prevent form from taking too much vertical space
+                        backgroundColor: '#FFF8DC',
+                        borderRadius: 8,
+                        boxShadow: 24,
+                        padding: 4,
+                        overflowY: 'auto', // Allows scrolling if content exceeds max height
+                        '@media (max-width: 1024px)': {
+                            width: '80%', // Medium devices (like tablets)
+                        },
+                        '@media (max-width: 768px)': {
+                            width: '85%', // Larger phones/tablets
+                        },
+                        '@media (max-width: 600px)': {
+                            width: '90%', // Smaller screens (e.g., smartphones)
+                        },
+                        '@media (max-width: 400px)': {
+                            width: '95%', // Very small screens (e.g., portrait phones)
+                        },
+                    }}
+                >
                     <Typography variant="h6" gutterBottom>
                         Nueva Orden
                     </Typography>
@@ -244,7 +260,7 @@ const OrderForm = () => {
                             Ordenar
                         </Button>
                     </Box>
-                </StyledBox>
+                </Box>
             </Modal>
             <Dialog open={confirmationOpen} onClose={() => setConfirmationOpen(false)}>
                 <DialogTitle>Muchas gracias por su encargo. Procesaremos su order dependiendo de la prioridad seleccionada.</DialogTitle>

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+    Box,
     ImageList,
     ImageListItem,
     ImageListItemBar,
@@ -41,26 +42,31 @@ const itemData = [
     },
     {
         img: './hero/IMG-20250419-WA0037.jpg',
-        name: '',
+        name: 'Frankie',
         description: '',
     },
     {
         img: './hero/IMG-20250423-WA0016.jpg',
         name: 'Nicauris Cristian',
-        description: '',
+        description: 'Amigo comerciante',
     },
     {
         img: './hero/IMG-20250423-WA0021.jpg',
-        name: '',
-        description: '',
+        name: 'Blás Canino',
+        description: 'Edificios Públicos, Toa Baja',
     },
     {
         img: './hero/IMG-20250423-WA0022.jpg',
         name: 'Ismael Colón',
         description: 'Perito Electricista',
     },
-    
- ];
+    {
+        img: './hero/IMG-20250425-WA0011.jpg',
+        name: 'Sol Mary Rodríguez',
+        description: 'Tribunal de Bayamón',
+    },
+
+];
 
 const HeroesGallery = () => {
     const theme = useTheme();
@@ -77,34 +83,42 @@ const HeroesGallery = () => {
                 Que sirva esta página como tributo a aquellos que me dieron la mano y
                 siguen ayudándome a realizar ese sueño. Con ustedes, mis héroes.
             </Typography>
-            <ImageList
+            <Box
                 sx={{
-                    width: '100%',
+                    overflowY: 'auto', // Makes the content scrollable
+                    flex: 1, // Allows this area to grow and fill the available space
+                    paddingBottom: '50px', // To ensure there's no overlap with footer
                 }}
-                cols={cols}
-                rowHeight="auto"
             >
-                {itemData.map((item) => (
-                    <ImageListItem key={item.img}>
-                        <img
-                            srcSet={`${item.img}`}
-                            src={`${item.img}`}
-                            style={{
-                                width: '100%',
-                                height: 'auto',
-                                display: 'block',
-                                objectFit: 'cover'
-                              }}
-                            alt={item.name}
-                            loading="lazy"
-                        />
-                        <ImageListItemBar
-                            title={item.name}
-                            subtitle={item.description}
-                        />
-                    </ImageListItem>
-                ))}
-            </ImageList>
+                <ImageList
+                    sx={{
+                        width: '100%',
+                    }}
+                    cols={cols}
+                    rowHeight="auto"
+                >
+                    {itemData.map((item) => (
+                        <ImageListItem key={item.img}>
+                            <img
+                                srcSet={`${item.img}`}
+                                src={`${item.img}`}
+                                style={{
+                                    width: '100%',
+                                    height: 'auto',
+                                    display: 'block',
+                                    objectFit: 'cover'
+                                }}
+                                alt={item.name}
+                                loading="lazy"
+                            />
+                            <ImageListItemBar
+                                title={item.name}
+                                subtitle={item.description}
+                            />
+                        </ImageListItem>
+                    ))}
+                </ImageList>
+            </Box>
         </>
     );
 };

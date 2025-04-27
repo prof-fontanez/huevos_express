@@ -1,6 +1,7 @@
 import { SocialIcon } from 'react-social-icons';
 import { Typography, Stack, Box } from '@mui/material';
 import FooterLinks from './FooterLinks';
+import ReactGA from "react-ga4";
 
 const socialMediaUrls = [
     { url: 'https://www.instagram.com/huevosexpresspr?igsh=MXdhdG9udnh3MGt0ag%3D%3D&utm_source=qr', label: 'Instragram de Huevos Express PR' },
@@ -12,6 +13,14 @@ const friendsSocialMediaUrls = [
     { url: 'https://facebook.com/profile.php?id=100042098476419', label: 'Facebook del Spot del Colombiano' },
 ];
 
+const trackLinkClick = (label, url) => {
+    ReactGA.event('click_social_link', {
+        category: 'Social Media',
+        label: label,
+        url: url,
+    });
+};
+
 const renderSocialIcons = (list) =>
     list.map((item, index) => (
         <SocialIcon
@@ -21,6 +30,7 @@ const renderSocialIcons = (list) =>
             bgColor="#A0522D"
             fgColor="#FFF8DC"
             style={{ height: 40, width: 40 }}
+            onClick={() => trackLinkClick(item.label, item.url)}
         />
     ));
 
@@ -28,7 +38,7 @@ const SocialMedia = () => {
     return (
         <Box>
             <Stack
-                direction={{ xs: 'column', md: 'row'}}
+                direction={{ xs: 'column', md: 'row' }}
                 spacing={{ xs: 3, lg: 8 }}
                 alignItems="center"
                 justifyContent="center"

@@ -18,6 +18,7 @@ const Layout = () => {
                     flexDirection: 'column',
                     minHeight: '100vh', // full screen height
                     overflowX: 'hidden',
+                    bgcolor: 'background.default'
                 }}
             >
                 <Header />
@@ -28,6 +29,7 @@ const Layout = () => {
                         px: 2,
                         py: 4,
                         overflowX: 'hidden', // optional double protection
+                        bgcolor: 'background.default'
                     }}
                 >
                     <Outlet />

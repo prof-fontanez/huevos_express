@@ -218,7 +218,7 @@ const Product = () => {
 
             {/* Order Form */}
             <Box sx={{ textAlign: 'center', mt: 1 }}>
-                <Typography variant='h6'>Ordenes por caja</Typography>
+                <Typography variant='h6'>Órdenes de entrega</Typography>
                 <OrderForm />
             </Box>
 

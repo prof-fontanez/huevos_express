@@ -17,24 +17,30 @@ import {
     MenuItem,
     InputLabel,
 } from '@mui/material';
-import { styled } from '@mui/system';
+
 import emailjs from '@emailjs/browser';
 
 const OrderForm = () => {
     const [errors, setErrors] = useState({});
     const [confirmationOpen, setConfirmationOpen] = useState(false);
     const [open, setOpen] = useState(false);
-    const [formData, setFormData] = useState({
+    const defaultFormData = {
         name: '',
         business: '',
         address: '',
         city: '',
         zip: '',
         phone: '',
-        qty: '1',
+        qty: '3',
+        type: 'Platos',
         priority: 'normal',
-        message: '', // optional message
-    });
+        message: '',
+    };
+
+    const [formData, setFormData] = useState(defaultFormData);
+    const qtyOptions = formData.type === 'Caja'
+        ? ['1', '2', '3']
+        : ['3', '4', '5', '6', '7', '8', '9', '10', '11'];
 
     const validateForm = () => {
         const newErrors = {};
@@ -46,61 +52,66 @@ const OrderForm = () => {
         if (!formData.zip.trim()) newErrors.zip = 'Requerido';
         if (!formData.phone.trim()) newErrors.phone = 'Requerido';
         if (!formData.qty) newErrors.qty = 'Requerido';
+        if (!formData.type) newErrors.type = 'Requerido';
         if (!formData.priority) newErrors.priority = 'Requerido';
 
-        if (formData.qty === '5+' && !formData.message.trim()) {
-            newErrors.message = 'Por favor especifique la cantidad solicitada.';
-        }
-
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0; // true if no errors
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleTypeChange = (e) => {
+        const newType = e.target.value;
+        const newQty = newType === 'Caja' ? '1' : '3'; // Reset qty depending on type
+
+        setFormData((prev) => ({
+            ...prev,
+            type: newType,
+            qty: newQty,
+        }));
+
+        setErrors((prev) => ({
+            ...prev,
+            qty: '', // Clear any qty errors
+            type: '', // Clear any type errors
+        }));
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
 
-        // Clear message error if qty is changed to less than '5+'
-        const updatedErrors = { ...errors };
-        if (name === 'qty' && value !== '5+') {
-            delete updatedErrors.message;
-        }
-
-        if (name === 'message') {
-            updatedErrors.message = ''; // Clear error when typing in the message
-        }
-
         setErrors((prev) => ({ ...prev, [name]: '' }));
     };
 
     const handleSubmit = () => {
-
         if (!validateForm()) return;
 
         const fullAddress = `${formData.address}, ${formData.city}, PR ${formData.zip}`;
         const googleMapsLink = `https://www.google.com/maps?q=${encodeURIComponent(fullAddress)}`;
 
-        // Update formData with the Google Maps link
         const updatedFormData = { ...formData, googleMapsLink };
 
         emailjs.send(
-            'service_ftvabkw', // your service ID
-            'template_0wvhq0f', // your template ID
-            updatedFormData,    // send the updated formData
-            'Zvmp-FaoqlRvuxVVp' // your public key
+            'service_ftvabkw',
+            'template_0wvhq0f',
+            updatedFormData,
+            'Zvmp-FaoqlRvuxVVp'
         )
             .then((result) => {
                 console.log('Email sent successfully:', result.text);
-                setConfirmationOpen(true); // Show the confirmation dialog
-                setOpen(false);            // Close the form modal
+                setConfirmationOpen(true);
+                setOpen(false);
+                setFormData(defaultFormData);
             })
             .catch((error) => {
                 console.error('Email error:', error);
                 alert('Failed to send order. Please try again.');
             });
     };
+
     const handleCancel = () => {
         setOpen(false);
+        setFormData(defaultFormData);
     };
 
     return (
@@ -108,6 +119,7 @@ const OrderForm = () => {
             <Button variant="contained" onClick={() => setOpen(true)}>
                 Forma de pedido
             </Button>
+            <Typography variant='body2'>Tres platos o más</Typography>
             <Modal open={open} onClose={handleCancel}>
                 <Box
                     sx={{
@@ -115,27 +127,19 @@ const OrderForm = () => {
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        width: '95%', // Set to 95% of the parent width
-                        maxWidth: 400, // Max width for larger screens
-                        minWidth: 280, // Min width for smaller screens
-                        maxHeight: '95vh', // Prevent form from taking too much vertical space
+                        width: '95%',
+                        maxWidth: 400,
+                        minWidth: 280,
+                        maxHeight: '95vh',
                         backgroundColor: '#FFF8DC',
                         borderRadius: 8,
                         boxShadow: 24,
                         padding: 4,
-                        overflowY: 'auto', // Allows scrolling if content exceeds max height
-                        '@media (max-width: 1024px)': {
-                            width: '80%', // Medium devices (like tablets)
-                        },
-                        '@media (max-width: 768px)': {
-                            width: '85%', // Larger phones/tablets
-                        },
-                        '@media (max-width: 600px)': {
-                            width: '90%', // Smaller screens (e.g., smartphones)
-                        },
-                        '@media (max-width: 400px)': {
-                            width: '95%', // Very small screens (e.g., portrait phones)
-                        },
+                        overflowY: 'auto',
+                        '@media (max-width: 1024px)': { width: '80%' },
+                        '@media (max-width: 768px)': { width: '85%' },
+                        '@media (max-width: 600px)': { width: '90%' },
+                        '@media (max-width: 400px)': { width: '95%' },
                     }}
                 >
                     <Typography variant="h6" gutterBottom>
@@ -208,23 +212,39 @@ const OrderForm = () => {
                         helperText={errors.phone}
                         required
                     />
-                    <FormControl fullWidth margin="dense">
-                        <InputLabel id="qty-label">Cantidad</InputLabel>
-                        <Select
-                            labelId="qty-label"
-                            name="qty"
-                            value={formData.qty}
-                            onChange={handleChange}
-                            label="Cantidad"
-                            required
-                        >
-                            <MenuItem value="1">1</MenuItem>
-                            <MenuItem value="2">2</MenuItem>
-                            <MenuItem value="3">3</MenuItem>
-                            <MenuItem value="4">4</MenuItem>
-                            <MenuItem value="5+">5+</MenuItem>
-                        </Select>
-                    </FormControl>
+                    <Box display="flex" gap={2} marginY={1}>
+                        <FormControl fullWidth margin="dense">
+                            <InputLabel id="qty-label">Cantidad</InputLabel>
+                            <Select
+                                labelId="qty-label"
+                                name="qty"
+                                value={formData.qty}
+                                onChange={handleChange}
+                                label="Cantidad"
+                                required
+                            >
+                                {qtyOptions.map((qty) => (
+                                    <MenuItem key={qty} value={qty}>
+                                        {qty}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth margin="dense">
+                            <InputLabel id="type-label">Tipo</InputLabel>
+                            <Select
+                                labelId="type-label"
+                                name="type"
+                                value={formData.type}
+                                onChange={handleTypeChange}
+                                label="Tipo"
+                                required
+                            >
+                                <MenuItem value="Caja">Caja</MenuItem>
+                                <MenuItem value="Platos">Platos</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
                     <FormControl margin="normal">
                         <FormLabel>Prioridad</FormLabel>
                         <RadioGroup
@@ -240,16 +260,15 @@ const OrderForm = () => {
                         </RadioGroup>
                     </FormControl>
 
-                    {/* Optional Message Field */}
                     <TextField
-                        label={`Mensaje (Especifique cantidad de 5 o más)${formData.qty === '5+' ? ' *' : ''}`}
+                        label='Mensaje (opcional)'
                         name="message"
                         fullWidth
                         margin="dense"
                         value={formData.message}
                         onChange={handleChange}
                         multiline
-                        rows={4}
+                        rows={2}
                         error={!!errors.message}
                         helperText={errors.message}
                     />
@@ -270,7 +289,6 @@ const OrderForm = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
-
         </>
     );
 };

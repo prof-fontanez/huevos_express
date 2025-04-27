@@ -15,9 +15,8 @@ const friendsSocialMediaUrls = [
 
 const trackLinkClick = (label, url) => {
     ReactGA.event('click_social_link', {
-        category: 'Social Media',
-        label: label,
-        url: url,
+        socialmedia_label: label,
+        socialmedia_url: url,
     });
 };
 

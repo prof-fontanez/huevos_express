@@ -12,6 +12,7 @@ export const initGA = () => {
   });
 
   ReactGA.initialize("G-94RQYQXZ88");
+  debug_mode: true,
 };
 
 export const logPageView = (path) => {

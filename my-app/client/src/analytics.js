@@ -1,15 +1,24 @@
 import ReactGA from "react-ga4";
 
 export const initGA = () => {
-  ReactGA.initialize("G-94RQYQXZ88"); // Make sure this ID matches your GA4 property
-  console.log("GA Initialization Triggered");
+  console.log("Initializing GA with ID G-94RQYQXZ88");
+
+  // Set default consent
+  window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+  window.dataLayer = window.dataLayer || [];
+  window.gtag('consent', 'default', {
+    'ad_storage': 'granted',
+    'analytics_storage': 'granted'
+  });
+
+  ReactGA.initialize("G-94RQYQXZ88");
 };
 
 export const logPageView = (path) => {
-  console.log("Page view logged: ", path); 
-  ReactGA.event('page_view', {
-    page_location: window.location.href,
-    page_path: path,
-    page_title: document.title
+  console.log("Page view logged: ", path);
+  ReactGA.send({
+    hitType: "pageview",
+    page: path,
+    title: document.title
   });
 };

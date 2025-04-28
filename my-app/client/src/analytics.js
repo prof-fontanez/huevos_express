@@ -11,8 +11,10 @@ export const initGA = () => {
     'analytics_storage': 'granted'
   });
 
-  ReactGA.initialize("G-94RQYQXZ88");
-  debug_mode: true,
+  // Initialize GA4 with debug_mode enabled
+  ReactGA.initialize("G-94RQYQXZ88", {
+    debug_mode: true, // <-- Fix: Include debug_mode inside the options object
+  });
 };
 
 export const logPageView = (path) => {

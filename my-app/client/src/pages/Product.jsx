@@ -188,6 +188,12 @@ const Product = () => {
                 </Grid>
             </Box>
 
+            {/* Order Form */}
+            <Box sx={{ textAlign: 'center', mt: 1 }}>
+                <Typography variant='h6'>Órdenes de entrega</Typography>
+                <OrderForm />
+            </Box>
+
             {/* QR Button */}
             <Box sx={{ textAlign: 'center', mt: 1 }}>
                 <Typography variant='h6'>Pague Aquí</Typography>
@@ -214,12 +220,6 @@ const Product = () => {
                         sx={{ width: 160, height: 'auto', display: 'block' }}
                     />
                 </Button>
-            </Box>
-
-            {/* Order Form */}
-            <Box sx={{ textAlign: 'center', mt: 1 }}>
-                <Typography variant='h6'>Órdenes de entrega</Typography>
-                <OrderForm />
             </Box>
 
             {/* Business Hours Section */}

@@ -1,84 +1,63 @@
-import React, { useState } from 'react';
-import {
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import React from 'react';
+import { Drawer, MenuItem } from '@mui/material';
 import { NavLink } from 'react-router-dom';
+import { alpha, useTheme } from '@mui/material/styles';
 
 const navLinks = [
   { label: 'Historia', path: '/' },
   { label: 'Producto', path: '/product' },
-  { label: 'Héroes', path: '/heroes'},
-  // Add more links as needed
+  { label: 'Héroes', path: '/heroes' },
 ];
 
-const Nav = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+const drawerWidth = 240;
 
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
+const Nav = ({
+  mobileOpen,
+  handleDrawerToggle,
+  handleDrawerClose,
+  handleDrawerTransitionEnd
+}) => {
+  const theme = useTheme();
   return (
-    <>
-      {/* Hamburger Icon */}
-      <IconButton
-        edge="start"
-        color="inherit"
-        aria-label="menu"
-        onClick={handleMenuClick}
-      >
-        <MenuIcon />
-      </IconButton>
-
-      {/* Floating Menu */}
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        slotProps={{
-          list: {
-            'aria-labelledby': 'basic-button',
-          },
-        }}
-      >
-        {navLinks.map((link) => (
-          <MenuItem
-            key={link.path}
-            component={NavLink}
-            to={link.path}
-            onClick={handleClose}
-            sx={{
-              '&.active': {
-                fontWeight: 'bold',
-                textDecoration: 'underline',
-                color: 'text.primary',
-              },
-              color: 'text.secondary',
-              fontFamily: 'Roboto, Arial, sans-serif'
-            }}
-          >
-              {link.label}
-          </MenuItem>
-        ))}
-      </Menu>
-    </>
+    <Drawer
+      anchor='right'
+      variant="temporary"
+      open={mobileOpen}
+      onTransitionEnd={handleDrawerTransitionEnd}
+      onClose={handleDrawerClose}
+      sx={{
+        '& .MuiDrawer-paper': {
+          boxSizing: 'border-box',
+          width: drawerWidth,
+          backgroundColor: alpha(theme.palette.background.paper, 0.4),
+          backdropFilter: 'blur(5px)', // optional: gives a frosted glass effect
+            },
+      }}
+      slotProps={{
+        root: {
+          keepMounted: true,
+        },
+      }}
+    >
+      {navLinks.map((link) => (
+        <MenuItem
+          key={link.path}
+          component={NavLink}
+          to={link.path}
+          onClick={handleDrawerToggle}
+          sx={{
+            '&.active': {
+              fontWeight: 'bold',
+              textDecoration: 'underline',
+            },
+            color: 'black',
+            fontFamily: 'Roboto, Arial, sans-serif'
+          }}
+        >
+          {link.label}
+        </MenuItem>
+      ))}
+    </Drawer>
   );
 };
 

@@ -1,9 +1,21 @@
 // components/Header.jsx
 import React from 'react';
-import { AppBar, Toolbar, Typography, Box } from '@mui/material';
+import {
+    AppBar,
+    Toolbar,
+    Typography,
+    Box,
+    IconButton
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import Nav from './Nav';
 
-const Header = () => {
+const Header = ({
+    mobileOpen,
+    handleDrawerToggle,
+    handleDrawerClose,
+    handleDrawerTransitionEnd
+}) => {
     return (
         <AppBar position="static" color="primary">
             <Toolbar sx={{ justifyContent: 'space-between', py: 1 }}>
@@ -15,7 +27,6 @@ const Header = () => {
                         sx={{
                             height: 32,
                             width: 32,
-                            // display: { xs: 'none', sm: 'block' },
                             marginRight: 1,
                         }}
                     />
@@ -41,13 +52,27 @@ const Header = () => {
                         sx={{
                             height: 32,
                             width: 32,
-                            // display: { xs: 'none', sm: 'block' },
                         }}
                     />
                 </Box>
-                <Box>
-                    <Nav />
-                </Box>
+
+                {/* Hamburger Menu Button */}
+                <IconButton
+                    edge="end"
+                    color="inherit"
+                    aria-label="menu"
+                    onClick={handleDrawerToggle}
+                >
+                    <MenuIcon />
+                </IconButton>
+
+                {/* Drawer Component */}
+                <Nav
+                    mobileOpen={mobileOpen}
+                    handleDrawerToggle={handleDrawerToggle}
+                    handleDrawerClose={handleDrawerClose}
+                    handleDrawerTransitionEnd={handleDrawerTransitionEnd}
+                />
             </Toolbar>
         </AppBar>
     );

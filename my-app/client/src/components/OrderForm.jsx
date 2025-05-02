@@ -24,6 +24,7 @@ const OrderForm = () => {
     const [errors, setErrors] = useState({});
     const [confirmationOpen, setConfirmationOpen] = useState(false);
     const [open, setOpen] = useState(false);
+
     const defaultFormData = {
         name: '',
         business: '',
@@ -31,6 +32,7 @@ const OrderForm = () => {
         city: '',
         zip: '',
         phone: '',
+        email: '',
         qty: '3',
         type: 'Platos',
         priority: 'normal',
@@ -38,6 +40,7 @@ const OrderForm = () => {
     };
 
     const [formData, setFormData] = useState(defaultFormData);
+
     const qtyOptions = formData.type === 'Caja'
         ? ['1', '2', '3']
         : ['3', '4', '5', '6', '7', '8', '9', '10', '11'];
@@ -51,6 +54,14 @@ const OrderForm = () => {
         if (!formData.city.trim()) newErrors.city = 'Requerido';
         if (!formData.zip.trim()) newErrors.zip = 'Requerido';
         if (!formData.phone.trim()) newErrors.phone = 'Requerido';
+
+        // Email format check
+        if (!formData.email.trim()) {
+            newErrors.email = 'Requerido';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = 'Correo inválido';
+        }
+
         if (!formData.qty) newErrors.qty = 'Requerido';
         if (!formData.type) newErrors.type = 'Requerido';
         if (!formData.priority) newErrors.priority = 'Requerido';
@@ -61,7 +72,7 @@ const OrderForm = () => {
 
     const handleTypeChange = (e) => {
         const newType = e.target.value;
-        const newQty = newType === 'Caja' ? '1' : '3'; // Reset qty depending on type
+        const newQty = newType === 'Caja' ? '1' : '3';
 
         setFormData((prev) => ({
             ...prev,
@@ -71,15 +82,14 @@ const OrderForm = () => {
 
         setErrors((prev) => ({
             ...prev,
-            qty: '', // Clear any qty errors
-            type: '', // Clear any type errors
+            qty: '',
+            type: '',
         }));
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
-
         setErrors((prev) => ({ ...prev, [name]: '' }));
     };
 
@@ -102,6 +112,7 @@ const OrderForm = () => {
                 setConfirmationOpen(true);
                 setOpen(false);
                 setFormData(defaultFormData);
+                setErrors({});
             })
             .catch((error) => {
                 console.error('Email error:', error);
@@ -112,11 +123,18 @@ const OrderForm = () => {
     const handleCancel = () => {
         setOpen(false);
         setFormData(defaultFormData);
+        setErrors({});
+    };
+
+    const handleOpen = () => {
+        setErrors({});
+        setFormData(defaultFormData);
+        setOpen(true);
     };
 
     return (
         <>
-            <Button variant="contained" onClick={() => setOpen(true)}>
+            <Button variant="contained" onClick={handleOpen}>
                 Forma de pedido
             </Button>
             <Typography variant='body2'>Tres platos o más</Typography>
@@ -148,10 +166,12 @@ const OrderForm = () => {
                     <TextField
                         label="Nombre"
                         name="name"
+                        type="text"
                         fullWidth
                         margin="dense"
                         value={formData.name}
                         onChange={handleChange}
+                        placeholder="Nombre Y. Apellido"
                         error={!!errors.name}
                         helperText={errors.name}
                         required
@@ -159,10 +179,12 @@ const OrderForm = () => {
                     <TextField
                         label="Nombre del negocio"
                         name="business"
+                        type="text"
                         fullWidth
                         margin="dense"
                         value={formData.business}
                         onChange={handleChange}
+                        placeholder="Mi Negocio"
                         error={!!errors.business}
                         helperText={errors.business}
                         required
@@ -170,6 +192,7 @@ const OrderForm = () => {
                     <TextField
                         label="Dirección"
                         name="address"
+                        type="text"
                         fullWidth
                         margin="dense"
                         value={formData.address}
@@ -181,6 +204,7 @@ const OrderForm = () => {
                     <TextField
                         label="Pueblo"
                         name="city"
+                        type="text"
                         fullWidth
                         margin="dense"
                         value={formData.city}
@@ -192,6 +216,7 @@ const OrderForm = () => {
                     <TextField
                         label="Código Postal"
                         name="zip"
+                        type="number"
                         fullWidth
                         margin="dense"
                         value={formData.zip}
@@ -203,6 +228,7 @@ const OrderForm = () => {
                     <TextField
                         label="Teléfono"
                         name="phone"
+                        type="tel"
                         fullWidth
                         margin="dense"
                         value={formData.phone}
@@ -210,6 +236,19 @@ const OrderForm = () => {
                         placeholder="(123) 456-7890"
                         error={!!errors.phone}
                         helperText={errors.phone}
+                        required
+                    />
+                    <TextField
+                        label="Correo electrónico"
+                        name="email"
+                        type="email"
+                        fullWidth
+                        margin="dense"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="nombre@email.com"
+                        error={!!errors.email}
+                        helperText={errors.email}
                         required
                     />
                     <Box display="flex" gap={2} marginY={1}>
@@ -222,6 +261,7 @@ const OrderForm = () => {
                                 onChange={handleChange}
                                 label="Cantidad"
                                 required
+                                error={!!errors.qty}
                             >
                                 {qtyOptions.map((qty) => (
                                     <MenuItem key={qty} value={qty}>
@@ -239,6 +279,7 @@ const OrderForm = () => {
                                 onChange={handleTypeChange}
                                 label="Tipo"
                                 required
+                                error={!!errors.type}
                             >
                                 <MenuItem value="Caja">Caja</MenuItem>
                                 <MenuItem value="Platos">Platos</MenuItem>
@@ -259,9 +300,8 @@ const OrderForm = () => {
                             <FormControlLabel value="high" control={<Radio />} label="Alta" />
                         </RadioGroup>
                     </FormControl>
-
                     <TextField
-                        label='Mensaje (opcional)'
+                        label="Mensaje (opcional)"
                         name="message"
                         fullWidth
                         margin="dense"
@@ -269,10 +309,7 @@ const OrderForm = () => {
                         onChange={handleChange}
                         multiline
                         rows={2}
-                        error={!!errors.message}
-                        helperText={errors.message}
                     />
-
                     <Box mt={2} display="flex" justifyContent="space-between">
                         <Button onClick={handleCancel}>Cancelar</Button>
                         <Button variant="contained" onClick={handleSubmit}>
@@ -282,10 +319,12 @@ const OrderForm = () => {
                 </Box>
             </Modal>
             <Dialog open={confirmationOpen} onClose={() => setConfirmationOpen(false)}>
-                <DialogTitle>Muchas gracias por su encargo. Procesaremos su order dependiendo de la prioridad seleccionada.</DialogTitle>
+                <DialogTitle>
+                    Muchas gracias por su encargo. Procesaremos su orden dependiendo de la prioridad seleccionada.
+                </DialogTitle>
                 <DialogActions>
                     <Button onClick={() => setConfirmationOpen(false)} autoFocus>
-                        Close
+                        Cerrar
                     </Button>
                 </DialogActions>
             </Dialog>

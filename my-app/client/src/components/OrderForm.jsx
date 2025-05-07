@@ -295,9 +295,9 @@ const OrderForm = () => {
                             onChange={handleChange}
                             required
                         >
-                            <FormControlLabel value="low" control={<Radio />} label="Baja" />
-                            <FormControlLabel value="normal" control={<Radio />} label="Normal" />
-                            <FormControlLabel value="high" control={<Radio />} label="Alta" />
+                            <FormControlLabel value="Baja" control={<Radio />} label="Baja" />
+                            <FormControlLabel value="Normal" control={<Radio />} label="Normal" />
+                            <FormControlLabel value="Alta" control={<Radio />} label="Alta" />
                         </RadioGroup>
                     </FormControl>
                     <TextField

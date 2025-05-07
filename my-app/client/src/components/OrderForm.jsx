@@ -5,8 +5,11 @@ import {
     DialogTitle,
     DialogActions,
     Box,
+    Stack,
     TextField,
     Typography,
+    Tooltip,
+    IconButton,
     RadioGroup,
     FormControlLabel,
     Radio,
@@ -17,6 +20,8 @@ import {
     MenuItem,
     InputLabel,
 } from '@mui/material';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+
 
 import emailjs from '@emailjs/browser';
 
@@ -287,18 +292,33 @@ const OrderForm = () => {
                         </FormControl>
                     </Box>
                     <FormControl margin="normal">
-                        <FormLabel>Prioridad</FormLabel>
-                        <RadioGroup
-                            row
-                            name="priority"
-                            value={formData.priority}
-                            onChange={handleChange}
-                            required
-                        >
-                            <FormControlLabel value="baja" control={<Radio />} label="Baja" />
-                            <FormControlLabel value="normal" control={<Radio />} label="Normal" />
-                            <FormControlLabel value="alta" control={<Radio />} label="Alta" />
-                        </RadioGroup>
+                        <FormControl component="fieldset">
+                            <Stack direction="row" alignItems="center" spacing={1} mb={1}>
+                                <FormLabel component="legend">Prioridad</FormLabel>
+                                <Tooltip
+                                    title="Baja: 3-5 días hábiles, Normal: 1-2 días hábiles, Alta: Dentro de 6 horas"
+                                    enterTouchDelay={0}
+                                    leaveTouchDelay={3000} // Stays open briefly
+                                    disableInteractive
+                                >
+                                    <IconButton size="small">
+                                        <InfoOutlinedIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                            </Stack>
+
+                            <RadioGroup
+                                row
+                                name="priority"
+                                value={formData.priority}
+                                onChange={handleChange}
+                                required
+                            >
+                                <FormControlLabel value="baja" control={<Radio />} label="Baja" />
+                                <FormControlLabel value="normal" control={<Radio />} label="Normal" />
+                                <FormControlLabel value="alta" control={<Radio />} label="Alta" />
+                            </RadioGroup>
+                        </FormControl>
                     </FormControl>
                     <TextField
                         label="Mensaje (opcional)"

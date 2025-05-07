@@ -12,10 +12,7 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
-    DialogActions,
-    Button,
-    useMediaQuery,
-    useTheme
+    Button
 } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import EmbeddedReviews from '../components/EmbeddedReviews';
@@ -48,18 +45,8 @@ const products = [
 
 const Product = () => {
     const [qrOpen, setQrOpen] = useState(false);
-    const [infoOpen, setInfoOpen] = useState(false);
     const handleQrOpen = () => setQrOpen(true);
     const handleQrClose = () => setQrOpen(false);
-    const handleInfoOpen = () => setInfoOpen(true);
-    const handleInfoClose = () => setInfoOpen(false);
-
-    const [openForm, setOpenForm] = useState(false);
-    const handleOpenForm = () => setOpenForm(true);
-    const handleCloseForm = () => setOpenForm(false);
-
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [, setBusinessHours] = useState([]);
 
     useEffect(() => {
@@ -144,41 +131,27 @@ const Product = () => {
                                             {product.description}
                                         </Typography>
                                         {index === products.length - 1 && (
-                                            isMobile ? (
-                                                <>
-                                                    <IconButton size="small" onClick={handleInfoOpen}>
-                                                        <InfoOutlinedIcon fontSize="small" />
-                                                    </IconButton>
-                                                    <Dialog open={infoOpen} onClose={handleInfoClose}>
-                                                        <DialogTitle>Información</DialogTitle>
-                                                        <DialogContent>
-                                                            Aplica a compras por caja o más. Contáctenos para más detalles.
-                                                        </DialogContent>
-                                                        <DialogActions>
-                                                            <Button onClick={handleInfoClose}>Cerrar</Button>
-                                                        </DialogActions>
-                                                    </Dialog>
-                                                </>
-                                            ) : (
-                                                <Tooltip
-                                                    title="Aplica a compras por caja o más. Contáctenos para más detalles."
-                                                    slots={{ transition: Fade }}
-                                                    slotProps={{
-                                                        transition: { timeout: 300 },
-                                                        popper: {
-                                                            modifiers: [
-                                                                { name: 'preventOverflow', options: { boundary: 'viewport' } },
-                                                                { name: 'offset', options: { offset: [0, 8] } },
-                                                                { name: 'flip', options: { enabled: true } },
-                                                            ],
-                                                        },
-                                                    }}
-                                                >
-                                                    <IconButton size="small">
-                                                        <InfoOutlinedIcon fontSize="small" />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            )
+                                            <Tooltip
+                                                title="Aplica a compras por caja o más. Contáctenos para más detalles."
+                                                enterTouchDelay={0}
+                                                leaveTouchDelay={3000} // Stays open briefly
+                                                disableInteractive
+                                                slots={{ transition: Fade }}
+                                                slotProps={{
+                                                    transition: { timeout: 300 },
+                                                    popper: {
+                                                        modifiers: [
+                                                            { name: 'preventOverflow', options: { boundary: 'viewport' } },
+                                                            { name: 'offset', options: { offset: [0, 8] } },
+                                                            { name: 'flip', options: { enabled: true } },
+                                                        ],
+                                                    },
+                                                }}
+                                            >
+                                                <IconButton size="small">
+                                                    <InfoOutlinedIcon fontSize="small" />
+                                                </IconButton>
+                                            </Tooltip>
                                         )}
                                     </Box>
                                 </CardContent>

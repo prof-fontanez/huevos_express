@@ -45,8 +45,10 @@ const Product = () => {
             </Box>
 
             {/* QR Payment Section */}
-            <Typography variant="h6" sx={{ textAlign: 'center' }}>Pague Aquí</Typography>
-            <ProductQrPayment />
+            <Box sx={{ textAlign: 'center', mt: 1 }}>
+                <Typography variant="h6" sx={{ textAlign: 'center' }}>Pague Aquí</Typography>
+                <ProductQrPayment />
+            </Box>
 
             {/* Business Hours Section */}
             <Box sx={{ textAlign: 'center', mt: 1 }}>

@@ -8,7 +8,8 @@ const Ticker = () => {
     // Function to fetch announcements from the API
     const fetchAnnouncements = async () => {
         try {
-            const response = await fetch('/api/announcements');
+            const baseUrl = process.env.REACT_APP_API_BASE_URL;
+            const response = await fetch(`${baseUrl}/api/announcements`);
             const data = await response.json();
             setAnnouncements(data.announcements || []);
         } catch (error) {
@@ -64,7 +65,7 @@ const Ticker = () => {
                 }}
             >
                 {announcements.map((msg, index) => (
-                    <span key={index} style={{ marginRight: '2rem' }}>
+                    <span key={index} style={{ color: '#FFF8DC', marginRight: '2rem' }}>
                         📢 {msg}
                     </span>
                 ))}

@@ -4,52 +4,52 @@ import { Box, Typography, useTheme } from '@mui/material';
 const sections = [
     {
         id: 1,
-        imageUrl: 'https://www.dropbox.com/scl/fi/5bbtb7srptrtawc99ead5/IMG-20250414-WA0061.jpg?rlkey=pnv6hynrjglug2d0xmtnixa4x&st=futi558h&dl=0',
+        imageUrl: './history/IMG-20250414-WA0061.jpg',
         text: 'Después de más de 30 años como servidor público, entrego mi uniforme de paramédico y me retiro el 31 de marzo de 2025.',
     },
     {
         id: 2,
-        imageUrl: 'https://www.dropbox.com/scl/fi/mqra4mz79vzcptiexucja/IMG-20250414-WA0063.jpg?rlkey=e9l9w9z7swy88916wzyy3jfp6&st=5s2yy42k&dl=0',
+        imageUrl: './history/IMG-20250414-WA0063.jpg',
         text: 'En esos 30 años serví a muchas personas. Hasta tuve la dicha de asistir un parto en la ambulancia.',
     },
     {
         id: 3,
-        imageUrl: 'https://www.dropbox.com/scl/fi/s5iap4kdhe33z8efi826p/IMG-20250413-WA0050.jpg?rlkey=c6tjdlenwruu62a8xtv0x4dsn&st=sqazrxfe&dl=0',
+        imageUrl: './history/IMG-20250413-WA0050.jpg',
         text: 'A par de meses de mi retiro, se me ocurre una idea para seguir sirviendo a mi gente: vender algún tipo de alimento.',
     },
     {
         id: 4,
-        imageUrl: 'https://www.dropbox.com/scl/fi/vg87oup40hurk13hhkyaa/IMG-20250413-WA0055.jpg?rlkey=aza0iqtwsjm00w2sdn5mum7xb&st=9wwq68px&dl=0',
+        imageUrl: './history/IMG-20250413-WA0055.jpg',
         text: 'Como el desayuno es la comida más importante del día, decidí por vender huevos frescos del país.',
     },
     {
         id: 5,
-        imageUrl: 'https://www.dropbox.com/scl/fi/jiamvgw0phwxmbqs32srt/IMG-20250414-WA0066.jpg?rlkey=0j1h6wdwid02u8oinygylo0nl&st=yyk135zb&dl=0',
+        imageUrl: './history/IMG-20250414-WA0066.jpg',
         text: 'Buscando lugar donde vender, traté bajo el puente de Sabana Seca primero.',
     },
     {
         id: 6,
-        imageUrl: 'https://www.dropbox.com/scl/fi/8lum33dghqyr69settunu/IMG-20250414-WA0073.jpg?rlkey=jgnrmbkzp6tk03tgqmhv70wjj&st=84qqwh3u&dl=0',
+        imageUrl: './history/IMG-20250414-WA0073.jpg',
         text: 'Luego traté frente a la pista de Higuillar en Dorado donde me ejercité corriendo por muchos años, pero no se me dió la suerte.',
     },
     {
         id: 7,
-        imageUrl: 'https://www.dropbox.com/scl/fi/u6awt3memzhiuxq2zweva/IMG-20250414-WA0069.jpg?rlkey=ap6vsu3qbhswzarajjaxx4iz9&st=rat89wr6&dl=0',
+        imageUrl: './history/IMG-20250414-WA0069.jpg',
         text: 'Compré mi primer letrero para el carro.',
     },
     {
         id: 8,
-        imageUrl: 'https://www.dropbox.com/scl/fi/rxa6z0txba6hld1ez5jmn/IMG-20250414-WA0074.jpg?rlkey=erkw8zuua306bqhj596qpggju&st=sy4foiz2&dl=0',
+        imageUrl: './history/IMG-20250414-WA0074.jpg',
         text: 'Hasta traté vendiendo en Facebook.',
     },
     {
         id: 9,
-        imageUrl: 'https://www.dropbox.com/scl/fi/89cf1hfqrzjk6shbxavet/IMG-20250414-WA0065.jpg?rlkey=6zaavzferi7xlmvmdqfbwy1ov&st=ua06suy1&dl=0',
+        imageUrl: './history/IMG-20250414-WA0065.jpg',
         text: 'Luego me moví donde estoy actualmente en la carretera 867 en el Barrio Ingenio de Toa Baja.',
     },
     {
         id: 10,
-        imageUrl: 'https://www.dropbox.com/scl/fi/3iypm65tgejh102du5741/IMG-20250414-WA0081.jpg?rlkey=zgdyr0hw1bxcvtmns9c6ssxfw&st=tpxbcf1r&dl=0',
+        imageUrl: './history/IMG-20250414-WA0081.jpg',
         text: 'Y al parecer, aquí me quiere Papito Dios para seguir sirviendo a la comunidad. ¡Aquí los esperamos!',
     },
 ];

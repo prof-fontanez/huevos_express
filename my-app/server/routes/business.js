@@ -1,5 +1,5 @@
 // server/routes/business.js
-const express = require('express');
+import express from 'express'; // Use ESM import
 const router = express.Router();
 
 // Sample business hours data
@@ -13,4 +13,5 @@ router.get('/', (req, res) => {
   res.json(businessHours);
 });
 
-module.exports = router;
+// Default export for ESM
+export default router;

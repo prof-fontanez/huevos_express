@@ -3,6 +3,7 @@ import { Box, GlobalStyles } from '@mui/material';
 import Header from "./Header";
 import Footer from "./Footer";
 import Nav from "./Nav";
+import Ticker from "./Ticker";
 import { Outlet } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -49,6 +50,9 @@ const Layout = () => {
                     handleDrawerClose={handleDrawerClose}
                     handleDrawerTransitionEnd={handleDrawerTransitionEnd}
                 />
+
+                {/* The ticker display announcements */}
+                <Ticker />
 
                 {/* Header gets the hamburger click handler */}
                 <Header handleDrawerToggle={handleDrawerToggle} />

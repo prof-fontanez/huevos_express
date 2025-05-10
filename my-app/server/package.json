@@ -9,9 +9,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^5.1.0"
+    "csv-parse": "^5.6.0",
+    "csv-parser": "^3.2.0",
+    "express": "^5.1.0",
+    "googleapis": "^148.0.0",
+    "node-fetch": "^3.3.2",
+    "socket.io": "^4.8.1"
   }
 }

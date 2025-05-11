@@ -1,6 +1,7 @@
 import express from 'express';
 import { google } from 'googleapis';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 const router = express.Router();
@@ -9,11 +10,12 @@ const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Path to your service account credentials
+// Securely load the credentials
 const CREDENTIALS_PATH = path.join(__dirname, '../google-credentials.json');
+const credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH, 'utf-8'));
 
 const auth = new google.auth.GoogleAuth({
-  keyFile: CREDENTIALS_PATH,
+  credentials,
   scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
 });
 
@@ -22,7 +24,7 @@ router.get('/', async (req, res) => {
     const client = await auth.getClient();
     const sheets = google.sheets({ version: 'v4', auth: client });
 
-    const spreadsheetId = '1kxJehaZAw28GVp6RqFn_OvbJuPj3Ga_-Q4SYzCZ77lM'; // Your actual spreadsheet ID
+    const spreadsheetId = '1kxJehaZAw28GVp6RqFn_OvbJuPj3Ga_-Q4SYzCZ77lM';
     const range = 'messages!A:A';
 
     const response = await sheets.spreadsheets.values.get({

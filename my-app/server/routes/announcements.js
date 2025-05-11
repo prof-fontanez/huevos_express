@@ -1,18 +1,10 @@
 import express from 'express';
 import { google } from 'googleapis';
-import path from 'path';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
 
 const router = express.Router();
 
-// Resolve __dirname in ES module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 // Securely load the credentials
-const CREDENTIALS_PATH = path.join(__dirname, '../google-credentials.json');
-const credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH, 'utf-8'));
+const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS_JSON);
 
 const auth = new google.auth.GoogleAuth({
   credentials,

@@ -6,20 +6,26 @@ const BusinessAddress = () => {
 
     const [businessName, setBusinessName] = useState('');
     const [formattedAddress, setFormattedAddress] = useState('');
+    const [error, setError] = useState('');
+
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
     useEffect(() => {
-        const fetchBusinessInfo = async () => {
-            try {
-                const response = await axios.get('/business');
-                setBusinessName(response.data.businessName);
-                setFormattedAddress(response.data.businessAddress);
-            } catch (error) {
-                console.error('Error fetching business info:', error);
-            }
-        };
-
-        fetchBusinessInfo();
-    }, []);
+        fetch(`${API_BASE_URL}/business`)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.businessAddress) {
+                    setFormattedAddress(data.businessAddress);
+                    setBusinessName(data.businessName);
+                } else {
+                    setError('Business address not available');
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching business address:', error);
+                setError('Failed to fetch business address');
+            });
+    }, [API_BASE_URL]);
 
     return (
         <Box sx={{ mb: 4 }}>

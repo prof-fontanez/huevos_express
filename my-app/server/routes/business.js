@@ -44,6 +44,8 @@ router.get('/', async (req, res) => {
 
       res.json({
         message: `Business hours for ${result.name}`,
+        businessName: result.name,
+        businessAddress: result.formatted_address,
         businessHours: translated,
       });
     } else {

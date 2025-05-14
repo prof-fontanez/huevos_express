@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import SocialMedia from './SocialMedia';
 import WebmasterInfo from './WebmasterInfo';
 import CommercialLicense from './CommercialLicense';
+import BusinessAddress from './BusinessAddress';
 
 const Footer = () => {
     return (
@@ -16,6 +17,7 @@ const Footer = () => {
                 mt: 2,
             }}
         >
+            <BusinessAddress />
             <SocialMedia/>
             <CommercialLicense />
             <WebmasterInfo />

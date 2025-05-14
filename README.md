@@ -24,3 +24,5 @@ This app is for a small business owner to be used for commercial purposes.
 - Implement user authentication for admin panel
 - Implement portal to update prices from admin panel
 - Implement some form of real-time update if prices change (could be polling, but would prefer a more dynamic way for this)
+
+All rights reserved. This software is the proprietary property of Hector Fontanez and Huevos Express PR and may not be copied, modified, or distributed without written permission.

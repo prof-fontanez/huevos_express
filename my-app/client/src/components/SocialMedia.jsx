@@ -37,8 +37,8 @@ const SocialMedia = () => {
     return (
         <Box>
             <Stack
-                direction={{ xs: 'column', md: 'row' }}
-                spacing={{ xs: 3, lg: 8 }}
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={{ xs: 3, sm: 18, md: 50, lg: 100 }}
                 alignItems="center"
                 justifyContent="center"
             >

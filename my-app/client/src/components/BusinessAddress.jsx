@@ -1,4 +1,5 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Link, Stack, Typography } from "@mui/material";
+import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -59,6 +60,17 @@ const BusinessAddress = () => {
                             </>
                         );
                     })()}
+                    <Stack
+                        direction={{ xs: 'row' }}
+                        spacing={{ xs: 1, sm: 3 }}
+                        alignItems="center"
+                        justifyContent="center"
+                    >
+                        <PhoneOutlinedIcon fontSize={'small'} />
+                        <Link href="tel:787-922-1754" variant="body2" color={"#FFF8DC"}>
+                            <Typography variant="body2" >787-922-1754</Typography>
+                        </Link>
+                    </Stack>
                 </Stack>
             </Stack>
         </Box>

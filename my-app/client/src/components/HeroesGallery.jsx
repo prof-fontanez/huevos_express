@@ -17,7 +17,7 @@ const itemData = [
     },
     {
         img: './hero/20250419_123150.jpg',
-        name: 'Mr. Brent Rhea',
+        name: 'Brent',
         description: 'Amigo y cliente de Cataño',
     },
     {
@@ -57,7 +57,7 @@ const itemData = [
     },
     {
         img: './hero/IMG-20250425-WA0011.jpg',
-        name: 'Sol Mary Rodríguez',
+        name: 'Solmary Rodríguez',
         description: 'Tribunal de Bayamón',
     },
 

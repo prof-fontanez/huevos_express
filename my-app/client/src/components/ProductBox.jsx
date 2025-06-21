@@ -18,7 +18,7 @@ const products = [
         imageUrl: 'carton30.jpg',
         title: 'Cartón de 30 huevos',
         description: 'Precios pueden variar diariamente',
-        price: '$20'
+        price: '$18'
     },
     {
         id: 2,

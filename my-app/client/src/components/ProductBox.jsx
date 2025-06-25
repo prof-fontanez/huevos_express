@@ -89,7 +89,7 @@ const ProductBox = () => {
         <Box sx={{ width: '100%' }}>
             {isFallback && (
                 <Alert severity="warning" sx={{ mb: 2 }}>
-                    Displaying fallback products due to backend connection issue.
+                    Lista de productos alterna debido a problemas con la base de datos. Verifíque precios.
                 </Alert>
             )}
             <Grid container spacing={2} justifyContent="center">

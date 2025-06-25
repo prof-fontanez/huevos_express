@@ -114,6 +114,17 @@ const OrderForm = () => {
         )
             .then((result) => {
                 console.log('Email sent successfully:', result.text);
+
+                // Send SMS notification
+                fetch('/api/notify-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ customerName: formData.name }),
+                })
+                    .then(res => res.json())
+                    .then(data => console.log('SMS notification sent:', data))
+                    .catch(err => console.error('SMS notification failed:', err));
+
                 setConfirmationOpen(true);
                 setOpen(false);
                 setFormData(defaultFormData);

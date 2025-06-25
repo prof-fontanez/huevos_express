@@ -7,6 +7,7 @@ const navLinks = [
   { label: 'Historia', path: '/' },
   { label: 'Producto', path: '/product' },
   { label: 'Héroes', path: '/heroes' },
+  { label: 'Administración', path: '/admin/products' },
 ];
 
 const drawerWidth = 240;

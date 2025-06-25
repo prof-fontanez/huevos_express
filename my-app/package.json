@@ -6,5 +6,8 @@
     "client": "npm start --prefix client",
     "server": "npm start --prefix server",
     "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "dependencies": {
+    "mysql2": "^3.14.1"
   }
 }

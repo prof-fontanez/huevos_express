@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Grid,
     Card,
@@ -8,38 +8,47 @@ import {
     Box,
     Fade,
     Tooltip,
-    IconButton
+    IconButton,
+    CircularProgress,
 } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-const products = [
-    {
-        id: 1,
-        imageUrl: 'carton30.jpg',
-        title: 'Cartón de 30 huevos',
-        description: 'Precios pueden variar diariamente',
-        price: '$18'
-    },
-    {
-        id: 2,
-        imageUrl: '18x2.jpg',
-        title: 'Paquete de 18 huevos',
-        description: 'Precios pueden variar diariamente',
-        price: '$13 (2 x $25)'
-    },
-    {
-        id: 3,
-        imageUrl: 'cartones.jpg',
-        title: 'Descuento si compra en cantidades',
-        description: 'Con entrega a pueblos limítrofes.'
-    },
-];
-
 const ProductBox = () => {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchProducts = async () => {
+        try {
+            const res = await fetch('/api/products');
+            const data = await res.json();
+            setProducts(data);
+        } catch (err) {
+            console.error('Failed to fetch products:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchProducts();
+
+        // Optional polling every 10 seconds
+        const interval = setInterval(fetchProducts, 10000); // 10,000 ms
+        return () => clearInterval(interval);
+    }, []);
+
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
+
     return (
         <Box sx={{ width: '100%' }}>
             <Grid container spacing={2} justifyContent="center">
-                {products.map((product, index) => (
+                {products.map((product) => (
                     <Grid
                         key={product.id}
                         item xs={12} sm={6} md={4} lg={3}
@@ -60,7 +69,7 @@ const ProductBox = () => {
                         >
                             <CardMedia
                                 component="img"
-                                image={product.imageUrl}
+                                image={product.image_url}
                                 alt={product.title}
                                 sx={{
                                     maxHeight: 160,
@@ -95,9 +104,9 @@ const ProductBox = () => {
                                     <Typography variant="body2" color="text.secondary">
                                         {product.description}
                                     </Typography>
-                                    {index === products.length - 1 && (
+                                    {(product.has_tooltip && product.tooltip_msg) ? (
                                         <Tooltip
-                                            title="Aplica a compras por caja o más. Contáctenos para más detalles."
+                                            title={product.tooltip_msg}
                                             enterTouchDelay={0}
                                             leaveTouchDelay={3000}
                                             disableInteractive
@@ -117,7 +126,7 @@ const ProductBox = () => {
                                                 <InfoOutlinedIcon fontSize="small" />
                                             </IconButton>
                                         </Tooltip>
-                                    )}
+                                    ) : null}
                                 </Box>
                             </CardContent>
                         </Card>

@@ -28,6 +28,14 @@ app.use(express.json());
 // ✅ Telnyx initialization
 const telnyx = Telnyx(process.env.TELNYX_API_KEY);
 
+app.get('/api/test-env', (req, res) => {
+  res.json({
+    NODE_ENV: process.env.NODE_ENV,
+    TELNYX_API_KEY: process.env.TELNYX_API_KEY ? '✅ loaded' : '❌ missing',
+    TELNYX_PHONE_NUMBER: process.env.TELNYX_PHONE_NUMBER ? '✅ loaded' : '❌ missing',
+  });
+});
+
 // ✅ Optional: SMS test endpoint (used only if needed)
 app.post('/send-sms', async (req, res) => {
   const { to, text } = req.body;

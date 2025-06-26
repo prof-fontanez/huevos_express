@@ -115,8 +115,9 @@ const OrderForm = () => {
             .then((result) => {
                 console.log('Email sent successfully:', result.text);
 
+                const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || '';
                 // Send SMS notification
-                fetch('/api/notify-order', {
+                fetch(`${apiBaseUrl}/api/notify-order`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ customerName: formData.name }),

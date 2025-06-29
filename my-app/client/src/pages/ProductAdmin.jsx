@@ -164,7 +164,7 @@ const ProductAdmin = () => {
 
     return (
         <Grid container justifyContent="center" sx={{ mt: 3 }}>
-            <Grid item xs={12} md={6}>
+            <Grid xs={12} md={6}>
                 <Card>
                     <CardContent>
                         <Typography variant="h5" gutterBottom>

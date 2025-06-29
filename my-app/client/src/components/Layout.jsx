@@ -1,31 +1,11 @@
-import React from "react";
 import { Box, GlobalStyles } from '@mui/material';
 import Header from "./Header";
 import Footer from "./Footer";
-import Nav from "./Nav";
 import Ticker from "./Ticker";
 import { Outlet } from "react-router-dom";
-
-const drawerWidth = 240;
+import PageTabs from "./PageTabs";
 
 const Layout = () => {
-    const [mobileOpen, setMobileOpen] = React.useState(false);
-    const [isClosing, setIsClosing] = React.useState(false);
-
-    const handleDrawerClose = () => {
-        setIsClosing(true);
-        setMobileOpen(false);
-    };
-
-    const handleDrawerTransitionEnd = () => {
-        setIsClosing(false);
-    };
-
-    const handleDrawerToggle = () => {
-        if (!isClosing) {
-            setMobileOpen((prev) => !prev);
-        }
-    };
 
     return (
         <>
@@ -43,19 +23,19 @@ const Layout = () => {
                     bgcolor: 'background.default'
                 }}
             >
-                {/* Nav only handles Drawer */}
-                <Nav
-                    mobileOpen={mobileOpen}
-                    handleDrawerToggle={handleDrawerToggle}
-                    handleDrawerClose={handleDrawerClose}
-                    handleDrawerTransitionEnd={handleDrawerTransitionEnd}
-                />
-
                 {/* The ticker display announcements */}
                 <Ticker />
 
                 {/* Header gets the hamburger click handler */}
-                <Header handleDrawerToggle={handleDrawerToggle} />
+                <Header />
+
+                <Box sx={{
+                    px: 2,
+                    boxShadow: 1,
+                    zIndex: 1,
+                }}>
+                    <PageTabs />
+                </Box>
 
                 <Box
                     component="main"
@@ -65,7 +45,6 @@ const Layout = () => {
                         py: 4,
                         overflowX: 'hidden',
                         transition: 'transform 0.3s ease',
-                        transform: mobileOpen ? `translateX(-${drawerWidth}px)` : 'none',
                         bgcolor: 'background.default',
                     }}
                 >

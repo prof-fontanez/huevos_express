@@ -1,11 +1,9 @@
-// components/Header.jsx
 import React, { useState } from 'react';
 import {
     AppBar,
     Toolbar,
     Typography,
     Box,
-    IconButton,
     Button,
     Dialog,
     DialogTitle,
@@ -14,8 +12,6 @@ import {
     DialogActions,
     Alert,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import Nav from './Nav';
 import { useAuth } from './AuthContext'; // Adjust path if needed
 
 const LoginDialog = ({ open, onClose }) => {
@@ -76,12 +72,7 @@ const LoginDialog = ({ open, onClose }) => {
     );
 };
 
-const Header = ({
-    mobileOpen,
-    handleDrawerToggle,
-    handleDrawerClose,
-    handleDrawerTransitionEnd,
-}) => {
+const Header = () => {
     const { auth, logout } = useAuth();
     const [loginOpen, setLoginOpen] = useState(false);
 
@@ -143,24 +134,8 @@ const Header = ({
                             </Button>
                         )}
 
-                        {/* Hamburger Menu Button */}
-                        <IconButton
-                            edge="end"
-                            color="inherit"
-                            aria-label="menu"
-                            onClick={handleDrawerToggle}
-                        >
-                            <MenuIcon />
-                        </IconButton>
                     </Box>
 
-                    {/* Drawer Component */}
-                    <Nav
-                        mobileOpen={mobileOpen}
-                        handleDrawerToggle={handleDrawerToggle}
-                        handleDrawerClose={handleDrawerClose}
-                        handleDrawerTransitionEnd={handleDrawerTransitionEnd}
-                    />
                 </Toolbar>
             </AppBar>
 

@@ -142,7 +142,7 @@ const ProductAdmin = () => {
     };
 
     if (!auth) return null; // wait for auth context
-    if (!auth.token || !auth.is_admin) {
+    if (!auth?.token || !auth?.isAdmin) {
         return (
             <Grid container justifyContent="center" sx={{ mt: 4 }}>
                 <Typography variant="h6" color="error">

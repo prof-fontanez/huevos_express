@@ -7,6 +7,7 @@ const basePages = [
     { label: 'Mi Historia', path: '/' },
     { label: 'Producto', path: '/product' },
     { label: 'Héroes', path: '/heroes' },
+    { label: 'Calendario', path: '/calendar'},
 ];
 
 const adminPage = { label: 'Admin', path: '/admin/products' };

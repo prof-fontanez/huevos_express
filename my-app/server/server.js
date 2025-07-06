@@ -7,6 +7,7 @@ import authRouter from './routes/auth.js';
 import businessRoute from './routes/business.js';
 import announcementsRouter from './routes/announcements.js';
 import notifyRouter from './routes/notifications.js';
+import eventsRouter from './routes/events.js';
 import Telnyx from 'telnyx';
 
 // ✅ Load environment variables early (only in development)
@@ -69,6 +70,7 @@ app.use('/business', businessRoute);
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRouter);
 app.use('/api/notify-order', notifyRouter);
+app.use('/api/events', eventsRouter);
 
 // ✅ Simple test route
 app.get('/', (req, res) => {

@@ -16,10 +16,12 @@ const LoginDialog = ({ open, onClose }) => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://huevos-express.onrender.com';
+
     const handleSubmit = async () => {
         setError('');
         try {
-            const res = await fetch('/api/auth/login', {
+            const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
@@ -31,11 +33,10 @@ const LoginDialog = ({ open, onClose }) => {
             } else {
                 setError(data.message || 'Login failed');
             }
-        } catch {
+        } catch (err) {
             setError('Network or server error');
         }
     };
-
     return (
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>Login</DialogTitle>

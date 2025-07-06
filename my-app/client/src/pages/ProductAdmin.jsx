@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../components/AuthContext';
 import {
     TextField,
@@ -14,13 +14,15 @@ import {
     FormControl,
 } from '@mui/material';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
+
 const ProductAdmin = () => {
     const { auth } = useAuth();
 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [selectedId, setSelectedId] = useState("new");
+    const [selectedId, setSelectedId] = useState('new');
     const [form, setForm] = useState({
         title: '',
         description: '',
@@ -28,31 +30,37 @@ const ProductAdmin = () => {
         image_url: '',
     });
 
-    // Fetch products on mount
-    useEffect(() => {
-        fetchProducts();
-    }, []);
+    const getAuthHeaders = useCallback(() => ({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${auth?.token || ''}`,
+    }), [auth?.token]);
 
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         setLoading(true);
         try {
-            const res = await fetch('/api/products');
+            const res = await fetch(`${BACKEND_URL}/api/products`, {
+                headers: getAuthHeaders(),
+            });
+            if (!res.ok) throw new Error(`Failed to fetch products: ${res.status}`);
             const data = await res.json();
             setProducts(data);
         } catch (error) {
             console.error('Error loading products:', error);
+            alert('Failed to load products. Check console.');
         } finally {
             setLoading(false);
         }
-    };
+    }, [getAuthHeaders]);
 
-    // When selectedId changes, update form
     useEffect(() => {
-        if (selectedId === 'new') {
-            // Clear form for new product
+        fetchProducts();
+    }, [fetchProducts]);
+
+    useEffect(() => {
+        const isNew = selectedId === 'new';
+        if (isNew) {
             setForm({ title: '', description: '', price: '', image_url: '' });
         } else {
-            // Find selected product
             const prod = products.find((p) => p.id === selectedId);
             if (prod) {
                 setForm({
@@ -69,61 +77,75 @@ const ProductAdmin = () => {
         setForm((prev) => ({ ...prev, [field]: value }));
     };
 
-    // Save (Update or Create)
+    const isNew = selectedId === 'new';
+
     const handleSave = async () => {
         setSaving(true);
-
         const payload = {
             title: form.title,
             description: form.description,
-            price: form.price, // Ensure it's an integer
+            price: form.price,
             image_url: form.image_url,
         };
-
         try {
-            let res, result;
-
-            if (selectedId !== 'new') {
-                // Update existing
-                res = await fetch(`/api/products/${selectedId}`, {
+            let res;
+            if (!isNew) {
+                res = await fetch(`${BACKEND_URL}/api/products/${selectedId}`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getAuthHeaders(),
                     body: JSON.stringify(payload),
                 });
-                result = await res.json();
-                if (result.success) {
-                    alert(`Product ${selectedId} updated successfully!`);
-                } else {
-                    alert('Update failed.');
-                }
             } else {
-                // Create new product
-                res = await fetch('/api/products', {
+                res = await fetch(`${BACKEND_URL}/api/products`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getAuthHeaders(),
                     body: JSON.stringify(payload),
                 });
-                result = await res.json();
-                if (result.success) {
-                    alert('Product created successfully!');
-                } else {
-                    alert('Creation failed.');
-                }
             }
-
-            // Refresh products and reset selection
-            await fetchProducts();
-            setSelectedId('new');
-            setForm({ title: '', description: '', price: '', image_url: '' });
+            if (!res.ok) throw new Error(`Save failed with status ${res.status}`);
+            const result = await res.json();
+            if (result.success) {
+                alert(isNew ? 'Product created successfully!' : `Product ${selectedId} updated successfully!`);
+                await fetchProducts();
+                setSelectedId('new');
+                setForm({ title: '', description: '', price: '', image_url: '' });
+            } else {
+                alert(isNew ? 'Creation failed.' : 'Update failed.');
+            }
         } catch (error) {
             console.error('Save error:', error);
-            alert('An error occurred.');
+            alert('An error occurred during save.');
         } finally {
             setSaving(false);
         }
     };
 
-    if (!auth || !auth.token || !auth.isAdmin) {
+    const handleDelete = async () => {
+        if (isNew) return;
+        const confirmDelete = window.confirm('Are you sure you want to delete this product? This action cannot be undone.');
+        if (!confirmDelete) return;
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/products/${selectedId}`, {
+                method: 'DELETE',
+                headers: getAuthHeaders(),
+            });
+            if (!res.ok) throw new Error(`Delete failed with status ${res.status}`);
+            const result = await res.json();
+            if (result.success) {
+                alert('Product deleted!');
+                await fetchProducts();
+                setSelectedId('new');
+                setForm({ title: '', description: '', price: '', image_url: '' });
+            } else {
+                alert('Deletion failed.');
+            }
+        } catch (error) {
+            console.error('Delete error:', error);
+            alert('An error occurred during deletion.');
+        }
+    };
+
+    if (!auth?.token || !auth?.is_admin) {
         return (
             <Grid container justifyContent="center" sx={{ mt: 4 }}>
                 <Typography variant="h6" color="error">
@@ -132,33 +154,6 @@ const ProductAdmin = () => {
             </Grid>
         );
     }
-
-    // Delete product
-    const handleDelete = async () => {
-        if (!selectedId) return;
-        const confirmDelete = window.confirm(
-            'Are you sure you want to delete this product? This action cannot be undone.'
-        );
-        if (!confirmDelete) return;
-
-        try {
-            const res = await fetch(`/api/products/${selectedId}`, {
-                method: 'DELETE',
-            });
-            const result = await res.json();
-            if (result.success) {
-                alert('Product deleted!');
-                await fetchProducts();
-                setSelectedId('');
-                setForm({ title: '', description: '', price: '', image_url: '' });
-            } else {
-                alert('Deletion failed.');
-            }
-        } catch (error) {
-            console.error('Delete error:', error);
-            alert('An error occurred.');
-        }
-    };
 
     if (loading) return <CircularProgress />;
 
@@ -198,6 +193,7 @@ const ProductAdmin = () => {
                                 ))}
                             </Select>
                         </FormControl>
+
                         <TextField
                             label="Title"
                             fullWidth
@@ -220,7 +216,8 @@ const ProductAdmin = () => {
                             margin="normal"
                             value={form.price}
                             onChange={(e) => handleInputChange('price', e.target.value)}
-                        />                        <TextField
+                        />
+                        <TextField
                             label="Image URL"
                             fullWidth
                             margin="normal"
@@ -228,24 +225,12 @@ const ProductAdmin = () => {
                             onChange={(e) => handleInputChange('image_url', e.target.value)}
                         />
 
-                        <Button
-                            variant="contained"
-                            fullWidth
-                            onClick={handleSave}
-                            disabled={saving}
-                            sx={{ mt: 2 }}
-                        >
-                            {saving ? 'Saving...' : selectedId ? 'Save Changes' : 'Create Product'}
+                        <Button variant="contained" fullWidth onClick={handleSave} disabled={saving} sx={{ mt: 2 }}>
+                            {saving ? 'Saving...' : isNew ? 'Create Product' : 'Save Changes'}
                         </Button>
 
-                        {selectedId && (
-                            <Button
-                                variant="outlined"
-                                color="error"
-                                fullWidth
-                                onClick={handleDelete}
-                                sx={{ mt: 1 }}
-                            >
+                        {!isNew && (
+                            <Button variant="outlined" color="error" fullWidth onClick={handleDelete} sx={{ mt: 1 }}>
                                 Delete Product
                             </Button>
                         )}

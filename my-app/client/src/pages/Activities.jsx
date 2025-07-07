@@ -15,7 +15,17 @@ const Activities = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/events?ts=${Date.now()}`);
+                const url = `${process.env.REACT_APP_API_BASE_URL}/api/events?ts=${Date.now()}-${Math.random()}`;
+
+                const response = await axios.get(url, {
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        Pragma: 'no-cache',
+                        Expires: '0',
+                    },
+                    cache: 'no-store',
+                });
+
                 const data = Array.isArray(response.data.events) ? response.data.events : [];
 
                 const now = dayjs.utc();

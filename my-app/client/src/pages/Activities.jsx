@@ -4,44 +4,45 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import utc from 'dayjs/plugin/utc';
 import axios from 'axios';
-import ActivityItem from '../components/ActivityItem'; // Adjust path if needed
+import ActivityItem from '../components/ActivityItem';
 
 dayjs.extend(utc);
 dayjs.locale('es');
 
 const Activities = () => {
-    const now = dayjs();
-
-    const [events, setEvents] = useState([]);
+    const [groupedEvents, setGroupedEvents] = useState({});
 
     useEffect(() => {
         const fetchEvents = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/events?ts=${Date.now()}`);
-                setEvents(response.data.events);
-            } catch (error) {
-                console.error('Error fetching events:', error);
+                const data = Array.isArray(response.data.events) ? response.data.events : [];
+
+                const now = dayjs();
+
+                const upcomingActivities = data
+                    .map(event => ({
+                        ...event,
+                        dateTime: dayjs(`${event.date} ${event.time}`, 'YYYY-MM-DD h:mm A'),
+                    }))
+                    .filter(event => event.dateTime.isAfter(now))
+                    .sort((a, b) => a.dateTime.unix() - b.dateTime.unix());
+
+                const grouped = upcomingActivities.reduce((acc, event) => {
+                    const year = event.dateTime.year();
+                    acc[year] = acc[year] || [];
+                    acc[year].push(event);
+                    return acc;
+                }, {});
+
+                setGroupedEvents(grouped);
+            } catch (err) {
+                console.error('Error fetching events:', err);
             }
         };
 
         fetchEvents();
     }, []);
-
-    // Filter out past events and parse dateTime
-    const upcomingActivities = events
-        .map(activity => ({
-            ...activity,
-            dateTime: dayjs(`${activity.date} ${activity.time}`, 'YYYY-MM-DD h:mm A', 'es'),
-        }))
-        .filter(activity => activity.dateTime.isAfter(now));
-
-    // Group by year
-    const groupedByYear = upcomingActivities.reduce((acc, activity) => {
-        const year = activity.dateTime.year();
-        acc[year] = acc[year] || [];
-        acc[year].push(activity);
-        return acc;
-    }, {});
 
     return (
         <Box
@@ -55,12 +56,12 @@ const Activities = () => {
                 gap: 6,
             }}
         >
-            {Object.keys(groupedByYear).length === 0 ? (
+            {Object.keys(groupedEvents).length === 0 ? (
                 <Typography variant="h6" textAlign="center" color="text.secondary">
                     No hay actividades programadas en este momento.
                 </Typography>
             ) : (
-                Object.entries(groupedByYear).map(([year, yearActivities]) => (
+                Object.entries(groupedEvents).map(([year, yearActivities]) => (
                     <Box key={year} sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                         <Typography variant="h5" sx={{ fontWeight: 700, mb: 2, px: 1 }}>
                             {year}

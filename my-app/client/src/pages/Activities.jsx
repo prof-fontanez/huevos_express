@@ -18,12 +18,12 @@ const Activities = () => {
                 const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/events?ts=${Date.now()}`);
                 const data = Array.isArray(response.data.events) ? response.data.events : [];
 
-                const now = dayjs();
+                const now = dayjs.utc();
 
                 const upcomingActivities = data
                     .map(event => ({
                         ...event,
-                        dateTime: dayjs(`${event.date} ${event.time}`, 'YYYY-MM-DD h:mm A'),
+                        dateTime: dayjs.utc(`${event.date} ${event.time}`, 'YYYY-MM-DD h:mm A'),
                     }))
                     .filter(event => event.dateTime.isAfter(now))
                     .sort((a, b) => a.dateTime.unix() - b.dateTime.unix());
@@ -69,8 +69,7 @@ const Activities = () => {
                         {yearActivities.map((activity, idx) => (
                             <ActivityItem
                                 key={`${year}-${idx}`}
-                                date={activity.date}
-                                time={activity.time}
+                                dateTime={activity.dateTime}
                                 description={activity.description}
                             />
                         ))}

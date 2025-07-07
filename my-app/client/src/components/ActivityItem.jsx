@@ -20,10 +20,12 @@ const getGoogleCalendarUrl = ({ title, startDateTime, endDateTime, description, 
     );
 };
 
-const ActivityItem = ({ date, time, description }) => {
-    // Parse date + time with consistent format and locale
-    const startDateTime = dayjs(`${date} ${time}`, 'YYYY-MM-DD h:mm A', 'es');
+const ActivityItem = ({ dateTime, description }) => {
+    const startDateTime = dayjs(dateTime);
     const endDateTime = startDateTime.add(1, 'hour');
+
+    const formattedDate = startDateTime.format('DD MMM').toUpperCase();
+    const formattedTime = startDateTime.format('h:mm A');
 
     const calendarUrl = getGoogleCalendarUrl({
         title: description,
@@ -32,8 +34,6 @@ const ActivityItem = ({ date, time, description }) => {
         description: `Actividad programada: ${description}`,
         location: 'Huevos Express PR',
     });
-
-    const formattedDate = startDateTime.format('DD MMM').toUpperCase();
 
     return (
         <Box
@@ -47,7 +47,7 @@ const ActivityItem = ({ date, time, description }) => {
                 boxShadow: 2,
                 overflow: 'hidden',
                 py: 2.5,
-                backgroundColor: 'background.paper', // inherit page bg
+                backgroundColor: 'background.paper',
             }}
         >
             {/* Fried Egg */}
@@ -93,13 +93,13 @@ const ActivityItem = ({ date, time, description }) => {
                             {formattedDate}
                         </Typography>
                         <Typography variant="caption" fontSize={11} lineHeight={1}>
-                            {time}
+                            {formattedTime}
                         </Typography>
                     </Box>
                 </Box>
             </Box>
 
-            {/* Description + Button */}
+            {/* Description + Calendar Button */}
             <Box sx={{ flex: 1, pr: 3 }}>
                 <Typography variant="body1" sx={{ fontWeight: 500, mb: 1 }}>
                     {description}

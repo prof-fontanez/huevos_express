@@ -17,7 +17,7 @@ const Activities = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/events`);
+                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/events?ts=${Date.now()}`);
                 setEvents(response.data.events);
             } catch (error) {
                 console.error('Error fetching events:', error);

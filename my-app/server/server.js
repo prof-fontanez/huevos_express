@@ -5,7 +5,7 @@ import { google } from 'googleapis';
 import productRoutes from './routes/products.js';
 import authRouter from './routes/auth.js';
 import businessRoute from './routes/business.js';
-// import announcementsRouter from './routes/announcements.js';
+import announcementsRouter from './routes/announcements.js';
 import notifyRouter from './routes/notifications.js';
 import eventsRouter from './routes/events.js';
 import Telnyx from 'telnyx';
@@ -65,7 +65,7 @@ app.post('/send-sms', async (req, res) => {
 });
 
 // ✅ Register routes
-// app.use('/api/announcements', announcementsRouter);
+app.use('/api/announcements', announcementsRouter);
 app.use('/api/events', eventsRouter);
 app.use('/business', businessRoute);
 app.use('/api/products', productRoutes);

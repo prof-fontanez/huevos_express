@@ -2,44 +2,44 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, CircularProgress } from '@mui/material';
 
 const Ticker = () => {
-    const [announcements, setAnnouncements] = useState([]);
-    const [loading, setLoading] = useState(true);
+    // const [announcements, setAnnouncements] = useState([]);
+    // const [loading, setLoading] = useState(true);
 
     // Function to fetch announcements from the API
-    const fetchAnnouncements = async () => {
-        try {
-            const baseUrl = process.env.REACT_APP_API_BASE_URL;
-            const response = await fetch(`${baseUrl}/api/announcements`);
-            const data = await response.json();
-            setAnnouncements(data.announcements || []);
-        } catch (error) {
-            console.error('Failed to fetch announcements:', error);
-            setAnnouncements([]);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // const fetchAnnouncements = async () => {
+    //     try {
+    //         const baseUrl = process.env.REACT_APP_API_BASE_URL;
+    //         const response = await fetch(`${baseUrl}/api/announcements`);
+    //         const data = await response.json();
+    //         setAnnouncements(data.announcements || []);
+    //     } catch (error) {
+    //         console.error('Failed to fetch announcements:', error);
+    //         setAnnouncements([]);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
-    useEffect(() => {
-        // Initial fetch
-        fetchAnnouncements();
+    // useEffect(() => {
+    //     // Initial fetch
+    //     fetchAnnouncements();
 
-        // Set up polling (e.g., fetch every 10 seconds)
-        const intervalId = setInterval(fetchAnnouncements, 10000); // 10 seconds
+    //     // Set up polling (e.g., fetch every 10 seconds)
+    //     const intervalId = setInterval(fetchAnnouncements, 10000); // 10 seconds
 
-        // Clean up the interval when the component is unmounted
-        return () => clearInterval(intervalId);
-    }, []);
+    //     // Clean up the interval when the component is unmounted
+    //     return () => clearInterval(intervalId);
+    // }, []);
 
-    if (loading) {
-        return (
-            <Box display="flex" justifyContent="center" py={2}>
-                <CircularProgress size={20} />
-            </Box>
-        );
-    }
+    // if (loading) {
+    //     return (
+    //         <Box display="flex" justifyContent="center" py={2}>
+    //             <CircularProgress size={20} />
+    //         </Box>
+    //     );
+    // }
 
-    if (announcements.length === 0) return null;
+    // if (announcements.length === 0) return null;
 
     return (
         <Box
@@ -53,7 +53,7 @@ const Ticker = () => {
                 px: 2,
             }}
         >
-            <Typography
+            {/* <Typography
                 component="div"
                 sx={{
                     display: 'inline-block',
@@ -69,7 +69,7 @@ const Ticker = () => {
                         📢 {msg}
                     </span>
                 ))}
-            </Typography>
+            </Typography> */}
         </Box>
     );
 };

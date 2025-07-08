@@ -1,5 +1,5 @@
 import express from 'express';
-import { getSheetsClient } from '../utils/googleSheetsClient.js'; // shared auth logic
+import { getSheetsClient } from '../utils/googleSheetsClient.js';
 
 const router = express.Router();
 
@@ -17,17 +17,22 @@ router.get('/', async (req, res) => {
 
         const rows = response.data.values || [];
 
-        // Remove header row, map rows to event objects
-        const events = rows.slice(1).map(([date, time, description]) => ({
-            date,
-            time,
-            description,
-        }));
+        // Remove header
+        const events = rows.slice(1)
+            .filter(row => row.length >= 3)
+            .map(([date, time, description]) => ({
+                date,
+                time,
+                description
+            }));
 
+        // Add iOS-safe headers
         res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
         res.set('Pragma', 'no-cache');
         res.set('Expires', '0');
         res.set('Surrogate-Control', 'no-store');
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('X-Platform-Fix', 'ios');
 
         res.json({ events });
     } catch (error) {

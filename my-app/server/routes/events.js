@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
         const sheets = await getSheetsClient();
 
         const spreadsheetId = '1_mHzDxZghiIUDjPw1MIBu9VbZE0qj9nPm7aiUMjCagg';
-        const range = 'eventos!A:C';
+        const range = 'eventos!A2:C';
 
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId,
@@ -17,13 +17,12 @@ router.get('/', async (req, res) => {
 
         const rows = response.data.values || [];
 
-        // Remove header
-        const events = rows.slice(1)
+        const events = rows
             .filter(row => row.length >= 3)
-            .map(([date, time, description]) => ({
-                date,
-                time,
-                description
+            .map(([date, time, description]) => ({ 
+                date, 
+                time, 
+                description 
             }));
 
         // Add iOS-safe headers
@@ -34,7 +33,8 @@ router.get('/', async (req, res) => {
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('X-Platform-Fix', 'ios');
 
-        res.json({ events });
+        return res.json({ events });
+
     } catch (error) {
         console.error('Error fetching events:', error.message);
         res.status(500).json({ events: [] });

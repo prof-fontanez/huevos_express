@@ -21,11 +21,18 @@ const Activities = () => {
             const now = dayjs.utc();
 
             const upcoming = data
-                .map((event) => ({
-                    ...event,
-                    dateTime: dayjs.utc(`${event.date} ${event.time}`, 'YYYY-MM-DD h:mm A'),
-                }))
-                .filter((event) => event.dateTime.isAfter(now))
+                .map((event) => {
+                    const rawDateTime = dayjs.utc(`${event.date} ${event.time}`, 'YYYY-MM-DD h:mm A', 'es', true);
+                    if (!rawDateTime.isValid()) {
+                        console.warn('Invalid event skipped:', event);
+                        return null;
+                    }
+                    return {
+                        ...event,
+                        dateTime: rawDateTime,
+                    };
+                })
+                .filter(event => event && event.dateTime.isAfter(now))
                 .sort((a, b) => a.dateTime.unix() - b.dateTime.unix());
 
             // Group by year
@@ -36,6 +43,7 @@ const Activities = () => {
                 return acc;
             }, {});
 
+            console.log('Fetched events:', data);
             setGroupedEvents(grouped);
         } catch (error) {
             console.error('Failed to fetch events:', error);

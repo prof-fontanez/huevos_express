@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     Modal,
     Dialog,
@@ -26,6 +27,8 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import emailjs from '@emailjs/browser';
 
 const OrderForm = () => {
+    const navigate = useNavigate();
+
     const [errors, setErrors] = useState({});
     const [confirmationOpen, setConfirmationOpen] = useState(false);
     const [open, setOpen] = useState(false);
@@ -126,10 +129,12 @@ const OrderForm = () => {
                     .then(data => console.log('SMS notification sent:', data))
                     .catch(err => console.error('SMS notification failed:', err));
 
-                setConfirmationOpen(true);
+                // setConfirmationOpen(true);
                 setOpen(false);
                 setFormData(defaultFormData);
                 setErrors({});
+                navigate('/thankyou');
+
             })
             .catch((error) => {
                 console.error('Email error:', error);
@@ -350,7 +355,7 @@ const OrderForm = () => {
                     </Box>
                 </Box>
             </Modal>
-            <Dialog open={confirmationOpen} onClose={() => setConfirmationOpen(false)}>
+            {/* <Dialog open={confirmationOpen} onClose={() => setConfirmationOpen(false)}>
                 <DialogTitle>
                     Muchas gracias por su encargo. Procesaremos su orden dependiendo de la prioridad seleccionada.
                 </DialogTitle>
@@ -359,7 +364,7 @@ const OrderForm = () => {
                         Cerrar
                     </Button>
                 </DialogActions>
-            </Dialog>
+            </Dialog> */}
         </>
     );
 };

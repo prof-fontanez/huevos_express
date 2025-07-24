@@ -73,7 +73,7 @@ const HeroesGallery = () => {
 
     return (
         <>
-            <Typography variant="h2">Mis Héroes</Typography>
+            <Typography variant="h4">Mis Héroes</Typography>
             <Typography variant="body2">
                 Que sirva esta página como tributo a aquellos que me dieron la mano y
                 siguen ayudándome a realizar ese sueño. Con ustedes, mis héroes.

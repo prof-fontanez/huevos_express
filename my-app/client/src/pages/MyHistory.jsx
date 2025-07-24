@@ -74,7 +74,7 @@ const MyHistory = () => {
                 flexDirection: 'column',
             }}
         >
-            <Typography variant="h2">Mi Historia</Typography>
+            <Typography variant="h4">Mi Historia</Typography>
             {/* Scrollable Content Container */}
             <Box
                 sx={{

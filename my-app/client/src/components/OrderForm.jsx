@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import {
     Modal,
+    Box,
     Dialog,
     DialogTitle,
     DialogActions,
-    Box,
     Stack,
     TextField,
     Typography,
@@ -22,12 +22,13 @@ import {
     InputLabel,
 } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import OrderSubmittedDialog from './OrderSubmittedDialog';
 
 
 import emailjs from '@emailjs/browser';
 
 const OrderForm = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const [errors, setErrors] = useState({});
     const [confirmationOpen, setConfirmationOpen] = useState(false);
@@ -129,11 +130,11 @@ const OrderForm = () => {
                     .then(data => console.log('SMS notification sent:', data))
                     .catch(err => console.error('SMS notification failed:', err));
 
-                // setConfirmationOpen(true);
+                setConfirmationOpen(true);
                 setOpen(false);
                 setFormData(defaultFormData);
                 setErrors({});
-                navigate('/thankyou');
+                // navigate('/thankyou');
 
             })
             .catch((error) => {
@@ -355,16 +356,10 @@ const OrderForm = () => {
                     </Box>
                 </Box>
             </Modal>
-            {/* <Dialog open={confirmationOpen} onClose={() => setConfirmationOpen(false)}>
-                <DialogTitle>
-                    Muchas gracias por su encargo. Procesaremos su orden dependiendo de la prioridad seleccionada.
-                </DialogTitle>
-                <DialogActions>
-                    <Button onClick={() => setConfirmationOpen(false)} autoFocus>
-                        Cerrar
-                    </Button>
-                </DialogActions>
-            </Dialog> */}
+            <OrderSubmittedDialog
+                open={confirmationOpen}
+                onClose={() => setConfirmationOpen(false)}
+            />
         </>
     );
 };

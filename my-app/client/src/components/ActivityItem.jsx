@@ -3,8 +3,10 @@ import { Box, Typography, Button } from '@mui/material';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import utc from 'dayjs/plugin/utc';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 dayjs.extend(utc);
+dayjs.extend(customParseFormat);
 dayjs.locale('es');
 
 const getGoogleCalendarUrl = ({ title, startDateTime, endDateTime, description, location }) => {
@@ -21,7 +23,26 @@ const getGoogleCalendarUrl = ({ title, startDateTime, endDateTime, description, 
 };
 
 const ActivityItem = ({ dateTime, description }) => {
-    const startDateTime = dayjs(dateTime);
+    // Defensive check - ensure dateTime is valid
+    if (!dateTime) {
+        console.error('ActivityItem: No dateTime provided');
+        return null;
+    }
+
+    let startDateTime;
+
+    // Handle if dateTime is already a dayjs object
+    if (dayjs.isDayjs(dateTime)) {
+        startDateTime = dateTime;
+    } else {
+        // Try to parse the dateTime
+        startDateTime = dayjs(dateTime);
+        if (!startDateTime.isValid()) {
+            console.error('ActivityItem: Invalid dateTime provided:', dateTime);
+            return null;
+        }
+    }
+
     const endDateTime = startDateTime.add(1, 'hour');
 
     const formattedDate = startDateTime.format('DD MMM').toUpperCase();

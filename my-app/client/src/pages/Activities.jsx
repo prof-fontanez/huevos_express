@@ -3,10 +3,122 @@ import { Box, Typography, CircularProgress, Button } from '@mui/material';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import utc from 'dayjs/plugin/utc';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import axios from 'axios';
 
 dayjs.extend(utc);
+dayjs.extend(customParseFormat);
 dayjs.locale('es');
+
+// Robust date parsing function compatible with iOS Safari
+const parseEventDateTime = (date, time) => {
+    console.log('🔍 Parsing event:', { date, time });
+    
+    if (!date || !time) {
+        console.warn('❌ Missing date or time:', { date, time });
+        return null;
+    }
+    
+    // Strategy 1: Try corrected dayjs parsing
+    try {
+        const combined = `${date} ${time}`;
+        console.log('📅 Strategy 1: Trying dayjs with combined string:', combined);
+        
+        // Fix: Remove the incorrect locale parameter position
+        let parsed = dayjs.utc(combined, 'YYYY-MM-DD h:mm A', true);
+        if (parsed.isValid()) {
+            console.log('✅ Strategy 1a (strict mode) SUCCESS:', parsed.format());
+            return parsed;
+        }
+        
+        // Try without strict mode
+        parsed = dayjs.utc(combined, 'YYYY-MM-DD h:mm A');
+        if (parsed.isValid()) {
+            console.log('✅ Strategy 1b (non-strict) SUCCESS:', parsed.format());
+            return parsed;
+        }
+        
+        console.log('❌ Strategy 1 failed - parsed date invalid');
+    } catch (error) {
+        console.warn('❌ Strategy 1 failed with error:', error);
+    }
+    
+    // Strategy 2: Manual parsing for iOS Safari compatibility
+    try {
+        console.log('🔧 Strategy 2: Trying manual parsing');
+        const [year, month, day] = date.split('-').map(num => parseInt(num, 10));
+        const timeMatch = time.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+        
+        if (!timeMatch) {
+            console.warn('❌ Strategy 2: Could not parse time format:', time);
+            return null;
+        }
+        
+        let hours = parseInt(timeMatch[1], 10);
+        const minutes = parseInt(timeMatch[2], 10);
+        const ampm = timeMatch[3].toUpperCase();
+        
+        console.log('🕐 Strategy 2: Parsed components:', { year, month, day, hours, minutes, ampm });
+        
+        // Convert to 24-hour format
+        if (ampm === 'PM' && hours !== 12) {
+            hours += 12;
+        } else if (ampm === 'AM' && hours === 12) {
+            hours = 0;
+        }
+        
+        console.log('🕐 Strategy 2: Converted to 24h format:', hours);
+        
+        // Create a Date object that iOS Safari can handle
+        const utcDate = new Date(Date.UTC(year, month - 1, day, hours, minutes, 0));
+        console.log('📅 Strategy 2: Created UTC Date:', utcDate.toISOString());
+        const parsed = dayjs.utc(utcDate);
+        
+        if (parsed.isValid()) {
+            console.log('✅ Strategy 2 (manual) SUCCESS:', parsed.format());
+            return parsed;
+        }
+        
+        console.log('❌ Strategy 2: dayjs.utc(utcDate) invalid');
+    } catch (error) {
+        console.warn('❌ Strategy 2 failed with error:', error);
+    }
+    
+    // Strategy 3: ISO string approach
+    try {
+        console.log('📝 Strategy 3: Trying ISO string approach');
+        const [year, month, day] = date.split('-');
+        const timeMatch = time.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+        
+        if (timeMatch) {
+            let hours = parseInt(timeMatch[1], 10);
+            const minutes = parseInt(timeMatch[2], 10);
+            const ampm = timeMatch[3].toUpperCase();
+            
+            if (ampm === 'PM' && hours !== 12) {
+                hours += 12;
+            } else if (ampm === 'AM' && hours === 12) {
+                hours = 0;
+            }
+            
+            const isoString = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00Z`;
+            console.log('📝 Strategy 3: Created ISO string:', isoString);
+            const parsed = dayjs.utc(isoString);
+            
+            if (parsed.isValid()) {
+                console.log('✅ Strategy 3 (ISO) SUCCESS:', parsed.format());
+                return parsed;
+            }
+            
+            console.log('❌ Strategy 3: dayjs.utc(isoString) invalid');
+        }
+    } catch (error) {
+        console.warn('❌ Strategy 3 failed with error:', error);
+    }
+    
+    console.error('💥 ALL STRATEGIES FAILED for:', { date, time });
+    return null;
+};
 
 const Activities = () => {
     const [groupedEvents, setGroupedEvents] = useState({});
@@ -22,11 +134,13 @@ const Activities = () => {
 
             const upcoming = data
                 .map((event) => {
-                    const rawDateTime = dayjs.utc(`${event.date} ${event.time}`, 'YYYY-MM-DD h:mm A', 'es', true);
-                    if (!rawDateTime.isValid()) {
+                    const rawDateTime = parseEventDateTime(event.date, event.time);
+                    
+                    if (!rawDateTime) {
                         console.warn('Invalid event skipped:', event);
                         return null;
                     }
+                    
                     return {
                         ...event,
                         dateTime: rawDateTime,
@@ -43,7 +157,7 @@ const Activities = () => {
                 return acc;
             }, {});
 
-            console.log('Fetched events:', data);
+            console.log('Successfully processed events:', Object.keys(grouped).length, 'years with events');
             setGroupedEvents(grouped);
         } catch (error) {
             console.error('Failed to fetch events:', error);

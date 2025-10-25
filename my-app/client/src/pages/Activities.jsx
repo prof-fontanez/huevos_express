@@ -224,11 +224,18 @@ const Activities = () => {
                 .filter(event => event && event.startDateTime.isAfter(now))
                 .sort((a, b) => a.startDateTime.unix() - b.startDateTime.unix());
 
-            // Group by year
+            // Group by year, then by month
             const grouped = upcoming.reduce((acc, event) => {
                 const year = event.startDateTime.year();
-                acc[year] = acc[year] || [];
-                acc[year].push(event);
+                const month = event.startDateTime.format('MMMM'); // Full month name in Spanish
+                const monthNum = event.startDateTime.month(); // 0-11 for sorting
+                
+                acc[year] = acc[year] || {};
+                acc[year][monthNum] = acc[year][monthNum] || {
+                    name: month,
+                    events: []
+                };
+                acc[year][monthNum].events.push(event);
                 return acc;
             }, {});
 
@@ -278,114 +285,135 @@ const Activities = () => {
                 gap: 6,
             }}
         >
-            {Object.entries(groupedEvents).map(([year, events]) => (
+            {Object.entries(groupedEvents).map(([year, months]) => (
                 <Box key={year} sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <Typography variant="h5" sx={{ fontWeight: 700, mb: 2, px: 1 }}>
+                    {/* Year Header */}
+                    <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, px: 1 }}>
                         {year}
                     </Typography>
 
-                    {events.map((event, idx) => {
-                        const startDateTime = event.startDateTime;
-                        const endDateTime = event.endDateTime;
-
-                        const formattedDate = startDateTime.format('DD MMM').toUpperCase();
-                        const formattedTimeStart = startDateTime.format('h:mm A');
-                        const formattedTimeEnd = endDateTime.format('h:mm A');
-                        
-                        // Show time range in the display
-                        const displayTime = `${formattedTimeStart} - ${formattedTimeEnd}`;
-
-                        // Format for Google Calendar - use local time without timezone conversion
-                        // Format: YYYYMMDDTHHmmss (no Z at the end means local time)
-                        const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-                            event.description
-                        )}&dates=${startDateTime.format('YYYYMMDDTHHmmss')}/${endDateTime.format('YYYYMMDDTHHmmss')}&details=${encodeURIComponent(
-                                `Actividad programada: ${event.description}`
-                            )}&location=${encodeURIComponent(event.description)}&ctz=${PR_TIMEZONE}`;
-
-                        return (
-                            <Box
-                                key={idx}
-                                sx={{
-                                    width: 'calc(100vw - 64px)',
-                                    maxWidth: '1200px',
-                                    mx: 'auto',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    borderRadius: 2,
-                                    boxShadow: 2,
-                                    overflow: 'hidden',
-                                    py: 2.5,
-                                    backgroundColor: 'background.paper',
+                    {/* Months within the year */}
+                    {Object.entries(months)
+                        .sort(([monthA], [monthB]) => parseInt(monthA) - parseInt(monthB))
+                        .map(([monthNum, monthData]) => (
+                        <Box key={monthNum} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                            {/* Month Header */}
+                            <Typography 
+                                variant="h6" 
+                                sx={{ 
+                                    fontWeight: 600, 
+                                    px: 2,
+                                    color: 'text.secondary'
                                 }}
                             >
-                                {/* Fried Egg */}
-                                <Box
-                                    sx={{
-                                        width: 130,
-                                        height: 130,
-                                        position: 'relative',
-                                        mx: 2,
-                                        flexShrink: 0,
-                                    }}
-                                >
+                                {monthData.name}
+                            </Typography>
+
+                            {/* Events in this month */}
+                            {monthData.events.map((event, idx) => {
+                                const startDateTime = event.startDateTime;
+                                const endDateTime = event.endDateTime;
+
+                                const formattedDate = startDateTime.format('DD MMM').toUpperCase();
+                                const formattedTimeStart = startDateTime.format('h:mm A');
+                                const formattedTimeEnd = endDateTime.format('h:mm A');
+                                
+                                // Show time range in the display
+                                const displayTime = `${formattedTimeStart} - ${formattedTimeEnd}`;
+
+                                // Format for Google Calendar - use local time without timezone conversion
+                                // Format: YYYYMMDDTHHmmss (no Z at the end means local time)
+                                const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+                                    event.description
+                                )}&dates=${startDateTime.format('YYYYMMDDTHHmmss')}/${endDateTime.format('YYYYMMDDTHHmmss')}&details=${encodeURIComponent(
+                                        `Actividad programada: ${event.description}`
+                                    )}&location=${encodeURIComponent(event.description)}&ctz=${PR_TIMEZONE}`;
+
+                                return (
                                     <Box
-                                        sx={(theme) => ({
-                                            width: '100%',
-                                            height: '100%',
-                                            bgcolor: '#ffffff',
-                                            borderRadius: '50%',
-                                            boxShadow: 'inset -4px -4px 6px rgba(0,0,0,0.05)',
+                                        key={idx}
+                                        sx={{
+                                            width: 'calc(100vw - 64px)',
+                                            maxWidth: '1200px',
+                                            mx: 'auto',
                                             display: 'flex',
-                                            justifyContent: 'center',
                                             alignItems: 'center',
-                                            border: `1px solid ${theme.palette.divider}`,
-                                        })}
+                                            borderRadius: 2,
+                                            boxShadow: 2,
+                                            overflow: 'hidden',
+                                            py: 2.5,
+                                            backgroundColor: 'background.paper',
+                                        }}
                                     >
+                                        {/* Fried Egg */}
                                         <Box
                                             sx={{
-                                                width: 75,
-                                                height: 75,
-                                                bgcolor: '#fbc02d',
-                                                borderRadius: '50%',
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                boxShadow: 'inset 2px 2px 4px rgba(0,0,0,0.1)',
-                                                textAlign: 'center',
-                                                px: 1,
-                                                gap: 0.5,
+                                                width: 130,
+                                                height: 130,
+                                                position: 'relative',
+                                                mx: 2,
+                                                flexShrink: 0,
                                             }}
                                         >
-                                            <Typography variant="caption" fontWeight={600} lineHeight={1}>
-                                                {formattedDate}
+                                            <Box
+                                                sx={(theme) => ({
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    bgcolor: '#ffffff',
+                                                    borderRadius: '50%',
+                                                    boxShadow: 'inset -4px -4px 6px rgba(0,0,0,0.05)',
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    border: `1px solid ${theme.palette.divider}`,
+                                                })}
+                                            >
+                                                <Box
+                                                    sx={{
+                                                        width: 75,
+                                                        height: 75,
+                                                        bgcolor: '#fbc02d',
+                                                        borderRadius: '50%',
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        boxShadow: 'inset 2px 2px 4px rgba(0,0,0,0.1)',
+                                                        textAlign: 'center',
+                                                        px: 1,
+                                                        gap: 0.5,
+                                                    }}
+                                                >
+                                                    <Typography variant="caption" fontWeight={600} lineHeight={1}>
+                                                        {formattedDate}
+                                                    </Typography>
+                                                    <Typography variant="caption" fontSize={9} lineHeight={1} sx={{ mt: 0.5 }}>
+                                                        {displayTime}
+                                                    </Typography>
+                                                </Box>
+                                            </Box>
+                                        </Box>
+
+                                        {/* Description + Calendar Button */}
+                                        <Box sx={{ flex: 1, pr: 3 }}>
+                                            <Typography variant="body1" sx={{ fontWeight: 500, mb: 1 }}>
+                                                {event.description}
                                             </Typography>
-                                            <Typography variant="caption" fontSize={9} lineHeight={1} sx={{ mt: 0.5 }}>
-                                                {displayTime}
-                                            </Typography>
+                                            <Button
+                                                variant="outlined"
+                                                size="small"
+                                                href={calendarUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                Agregar a Google Calendar
+                                            </Button>
                                         </Box>
                                     </Box>
-                                </Box>
-
-                                {/* Description + Calendar Button */}
-                                <Box sx={{ flex: 1, pr: 3 }}>
-                                    <Typography variant="body1" sx={{ fontWeight: 500, mb: 1 }}>
-                                        {event.description}
-                                    </Typography>
-                                    <Button
-                                        variant="outlined"
-                                        size="small"
-                                        href={calendarUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        Agregar a Google Calendar
-                                    </Button>
-                                </Box>
-                            </Box>
-                        );
-                    })}
+                                );
+                            })}
+                        </Box>
+                    ))}
                 </Box>
             ))}
         </Box>

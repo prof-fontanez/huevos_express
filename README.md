@@ -25,4 +25,7 @@ This app is for a small business owner to be used for commercial purposes.
 - Implement portal to update prices from admin panel
 - Implement some form of real-time update if prices change (could be polling, but would prefer a more dynamic way for this)
 
+## Notes / Security Vulnerabilities
+- npm audit reports 26 vulnerabilities inherited from react-scripts (Create React App). These cannot be resolved without migrating to a modern build tool such as Vite. This is a known limitation of CRA.
+
 All rights reserved. This software is the proprietary property of Hector Fontanez and Huevos Express PR and may not be copied, modified, or distributed without written permission.

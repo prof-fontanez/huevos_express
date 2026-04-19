@@ -8,7 +8,7 @@ const Ticker = () => {
     // Function to fetch announcements from the API
     const fetchAnnouncements = async () => {
         try {
-            const baseUrl = process.env.REACT_APP_API_BASE_URL;
+            const baseUrl = import.meta.env.VITE_API_BASE_URL;
             const response = await fetch(`${baseUrl}/api/announcements`);
             const data = await response.json();
             setAnnouncements(data.announcements || []);

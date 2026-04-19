@@ -119,7 +119,7 @@ const OrderForm = () => {
             .then((result) => {
                 console.log('Email sent successfully:', result.text);
 
-                const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || '';
+                const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
                 // Send SMS notification
                 fetch(`${apiBaseUrl}/api/notify-order`, {
                     method: 'POST',

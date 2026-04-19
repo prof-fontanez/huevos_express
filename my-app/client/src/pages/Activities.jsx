@@ -198,7 +198,7 @@ const Activities = () => {
 
     const fetchEvents = async () => {
         try {
-            const baseUrl = process.env.REACT_APP_API_BASE_URL;
+            const baseUrl = import.meta.env.VITE_API_BASE_URL;
             const response = await axios.get(`${baseUrl}/api/events?ts=${Date.now()}`);
             const data = Array.isArray(response.data.events) ? response.data.events : [];
 

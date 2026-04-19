@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://huevos-express.onrender.com';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://huevos-express.onrender.com';
 
 // Hard-coded fallback products
 const mockProducts = [

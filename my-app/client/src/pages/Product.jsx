@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import {
     Typography,
     Box
@@ -11,17 +10,6 @@ import ProductBox from '../components/ProductBox';
 import ProductQrPayment from '../components/ProductQrPayment';
 
 const Product = () => {
-    const [, setBusinessHours] = useState([]);
-
-    useEffect(() => {
-        fetch('/business')
-            .then((response) => response.json())
-            .then((data) => {
-                console.log('Fetched business hours:', data);
-                setBusinessHours(data);
-            })
-            .catch((error) => console.error('Error fetching business hours:', error));
-    }, []);
 
     return (
         <Box

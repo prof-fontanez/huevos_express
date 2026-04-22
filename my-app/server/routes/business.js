@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
         params: {
           place_id: PLACE_ID,
           key: API_KEY,
-          fields: 'name,formatted_address,opening_hours',
+          fields: 'name,formatted_address,opening_hours,geometry',
         },
       }
     );
@@ -47,6 +47,10 @@ router.get('/', async (req, res) => {
         businessName: result.name,
         businessAddress: result.formatted_address,
         businessHours: translated,
+        coordinates: {
+          lat: result.geometry.location.lat,
+          lng: result.geometry.location.lng
+        }
       });
     } else {
       res.status(404).json({ error: 'Business hours not available' });

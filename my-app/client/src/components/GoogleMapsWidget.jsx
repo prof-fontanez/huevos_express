@@ -1,17 +1,62 @@
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from 'react';
+import { useLoadScript, GoogleMap } from '@react-google-maps/api';
+
+const mapContainerStyle = {
+    width: '100%',
+    height: '400px'
+};
+
+const libraries = ['marker'];
 
 const GoogleMapsWidget = () => {
-    useEffect(() => {
-        const script = document.createElement("script");
-        script.src = "https://static.elfsight.com/platform/platform.js";
-        script.defer = true;
-        script.setAttribute("data-use-service-core", "");
-        document.body.appendChild(script);
 
-    }, []);
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+        libraries
+    });
+
+    const mapRef = useRef(null);
+    const [error, setError] = useState('');
+    const [coordinates, setCoordinates] = useState(null);
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    useEffect(() => {
+        fetch(`${API_BASE_URL}/business`)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.coordinates) {
+                    setCoordinates(data.coordinates);
+                } else {
+                    setError('Business address not available');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                setError('Failed to fetch business address');
+            });
+    }, [API_BASE_URL]);
+
+    useEffect(() => {
+        if (!mapRef.current || !coordinates || !isLoaded) return;
+        const marker = new google.maps.marker.AdvancedMarkerElement({
+            map: mapRef.current,
+            position: coordinates,
+        });
+        return () => marker.map = null;
+    }, [coordinates, isLoaded]);
+
+    if (error) return <div>{error}</div>
+    if (loadError) return <div>Error loading map</div>
+    if (!isLoaded || !coordinates) return <div>Loading map...</div>
 
     return (
-        <div className="elfsight-app-8084fec8-a685-437b-8ff1-fecc6463cb18" data-elfsight-app-lazy />
+        <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            center={coordinates}
+            zoom={15}
+            onLoad={(map) => mapRef.current = map}
+            options={{ mapId: import.meta.env.VITE_GOOGLE_MAPS_ID }}
+        />
     );
 }
 

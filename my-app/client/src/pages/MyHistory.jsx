@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 const sections = [
@@ -54,14 +54,27 @@ const sections = [
     },
 ];
 
+const SLIDE_DURATION = 10000;
+const FADE_DURATION = 800;
+
 const MyHistory = () => {
     const theme = useTheme();
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [visible, setVisible] = useState(true);
 
-    const getDirectDropboxUrl = (url) => {
-        if (!url.includes("dropbox.com")) return url; // don't touch non-Dropbox URLs
-        return url
-            .replace("www.dropbox.com/scl/fi/", "dl.dropboxusercontent.com/s/");
-    };
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setVisible(false);
+            setTimeout(() => {
+                setCurrentIndex((prev) => (prev + 1) % sections.length);
+                setVisible(true);
+            }, FADE_DURATION);
+        }, SLIDE_DURATION);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    const section = sections[currentIndex];
 
     return (
         <Box
@@ -69,76 +82,73 @@ const MyHistory = () => {
                 maxWidth: '1200px',
                 margin: '0 auto',
                 p: 2,
-                height: '60vh', // Full viewport height
                 display: 'flex',
                 flexDirection: 'column',
+                alignItems: 'center',
             }}
         >
-            <Typography variant="h4">Mi Historia</Typography>
-            {/* Scrollable Content Container */}
+            <Typography variant="h4" sx={{ mb: 4 }}>Mi Historia</Typography>
+
+            {/* Slide counter */}
+            <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
+                {currentIndex + 1} / {sections.length}
+            </Typography>
+
+            {/* Slide container */}
             <Box
                 sx={{
-                    overflowY: 'auto', // Makes the content scrollable
-                    flex: 1, // Allows this area to grow and fill the available space
-                    paddingBottom: '50px', // To ensure there's no overlap with footer
+                    opacity: visible ? 1 : 0,
+                    transition: `opacity ${FADE_DURATION}ms ease-in-out`,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    width: '100%',
                 }}
             >
-                {sections.map((section, index) => {
-                    const isEven = index % 2 === 1;
+                {/* Image + overlay container */}
+                <Box
+                    sx={{
+                        position: 'relative',
+                        width: { xs: '100%', md: '60%' },
+                        borderRadius: 2,
+                        overflow: 'hidden',
+                    }}
+                >
+                    {/* Image */}
+                    <Box
+                        component="img"
+                        src={section.imageUrl}
+                        alt={`Slide ${section.id}`}
+                        sx={{
+                            width: '100%',
+                            maxHeight: 400,
+                            objectFit: 'cover',
+                            display: 'block',
+                            borderRadius: 2,
+                        }}
+                    />
 
-                    return (
-                        <Box
-                            key={section.id}
-                            sx={{
-                                display: 'flex',
-                                flexDirection: {
-                                    xs: 'column',
-                                    md: isEven ? 'row-reverse' : 'row',
-                                },
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                mb: 4,
-                                gap: 2,
-                            }}
+                    {/* Text overlay */}
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            bgcolor: 'rgba(0, 0, 0, 0.5)',
+                            p: 2,
+                            borderBottomLeftRadius: 8,
+                            borderBottomRightRadius: 8,
+                        }}
+                    >
+                        <Typography
+                            variant="body1"
+                            sx={{ color: '#ffffff', textAlign: 'center' }}
                         >
-                            <Box
-                                sx={{
-                                    width: { xs: '100%', md: '50%' },
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    p: 2,
-                                }}
-                            >
-                                <Box
-                                    component="img"
-                                    src={getDirectDropboxUrl(section.imageUrl)}
-                                    alt={`Section ${section.id}`}
-                                    sx={{
-                                        maxWidth: '100%',
-                                        maxHeight: 400,
-                                        width: 'auto',
-                                        height: 'auto',
-                                        objectFit: 'contain',
-                                        borderRadius: 2,
-                                    }}
-                                />
-                            </Box>
-
-                            <Box
-                                sx={{
-                                    width: { xs: '100%', md: '50%' },
-                                    p: 3,
-                                    bgcolor: 'rgba(0, 0, 0, 0.05)',
-                                    borderRadius: 2,
-                                    textAlign: 'center',
-                                }}
-                            >
-                                <Typography variant="body1">{section.text}</Typography>
-                            </Box>
-                        </Box>
-                    );
-                })}
+                            {section.text}
+                        </Typography>
+                    </Box>
+                </Box>
             </Box>
         </Box>
     );

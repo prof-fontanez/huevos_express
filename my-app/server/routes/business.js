@@ -28,7 +28,8 @@ router.get('/', async (req, res) => {
         params: {
           place_id: PLACE_ID,
           key: API_KEY,
-          fields: 'name,formatted_address,opening_hours,geometry',
+          fields: 'name,formatted_address,opening_hours,geometry,reviews,rating,user_ratings_total',
+          language: 'es',  // return content in Spanish
         },
       }
     );
@@ -50,7 +51,11 @@ router.get('/', async (req, res) => {
         coordinates: {
           lat: result.geometry.location.lat,
           lng: result.geometry.location.lng
-        }
+        },
+        reviews: result.reviews || [],
+        rating: result.rating || null,
+        totalReviews: result.user_ratings_total || 0
+
       });
     } else {
       res.status(404).json({ error: 'Business hours not available' });

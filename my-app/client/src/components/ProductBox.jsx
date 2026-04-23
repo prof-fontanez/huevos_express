@@ -11,6 +11,7 @@ import {
     CircularProgress,
     useTheme,
     useMediaQuery,
+    Alert,
 } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -19,6 +20,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://huevos-express.onrender.com';
+const IS_DEV = import.meta.env.DEV;
 
 const mockProducts = [
     {
@@ -26,7 +28,7 @@ const mockProducts = [
         title: 'Producto A (Mock)',
         description: 'Descripción simulada A',
         price: '$4.99',
-        image_url: 'https://www.pexels.com/photo/white-and-brown-eggs-in-close-up-photography-7965917/',
+        image_url: 'https://images.pexels.com/photos/2014422/pexels-photo-2014422.jpeg',
         has_tooltip: true,
         tooltip_msg: 'Este es un producto simulado.',
     },
@@ -35,7 +37,7 @@ const mockProducts = [
         title: 'Producto B (Mock)',
         description: 'Descripción simulada B',
         price: '$5.99',
-        image_url: 'https://www.pexels.com/photo/white-and-brown-eggs-in-close-up-photography-7965917/',
+        image_url: 'https://images.pexels.com/photos/2014422/pexels-photo-2014422.jpeg',
         has_tooltip: false,
         tooltip_msg: '',
     },
@@ -44,7 +46,7 @@ const mockProducts = [
         title: 'Producto C (Mock)',
         description: 'Descripción simulada C',
         price: '$6.99',
-        image_url: 'https://www.pexels.com/photo/white-and-brown-eggs-in-close-up-photography-7965917/',
+        image_url: 'https://images.pexels.com/photos/2014422/pexels-photo-2014422.jpeg',
         has_tooltip: true,
         tooltip_msg: 'Simulación de tooltip para el producto.',
     },
@@ -61,6 +63,7 @@ const ProductBox = () => {
 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [paused, setPaused] = useState(false);
     const [visible, setVisible] = useState(true);
@@ -71,9 +74,14 @@ const ProductBox = () => {
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             const data = await res.json();
             setProducts(data);
+            setError(false);
         } catch (err) {
-            console.error('Failed to fetch products, using fallback:', err.message);
-            setProducts(mockProducts);
+            console.error('Failed to fetch products:', err.message);
+            if (IS_DEV) {
+                setProducts(mockProducts);
+            } else {
+                setError(true);
+            }
         } finally {
             setLoading(false);
         }
@@ -117,6 +125,31 @@ const ProductBox = () => {
         );
     }
 
+    if (error) {
+        return (
+            <Box sx={{
+                width: '100%',
+                mt: 2,
+                display: 'flex',
+                justifyContent: 'center',
+            }}>
+                <Alert
+                    severity="error"
+                    sx={{
+                        width: { xs: '100%', sm: '50%', md: '20%' },
+                        textAlign: 'center',
+                    }}
+                >
+                    <Typography variant="body1" fontWeight="bold" sx={{ mb: 1 }}>
+                        La información del producto no está disponible en este momento.
+                    </Typography>
+                    <Typography variant="caption">
+                        Por favor contacte al administrador si continúa viendo este mensaje.
+                    </Typography>
+                </Alert>
+            </Box>
+        );
+    }
     const visibleProducts = products.slice(currentIndex, currentIndex + visibleCount);
 
     return (

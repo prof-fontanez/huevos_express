@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useLoadScript, GoogleMap } from '@react-google-maps/api';
 
 const mapContainerStyle = {
@@ -15,7 +15,7 @@ const GoogleMapsWidget = () => {
         libraries
     });
 
-    const mapRef = useRef(null);
+    const [mapInstance, setMapInstance] = useState(null);
     const [error, setError] = useState('');
     const [coordinates, setCoordinates] = useState(null);
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -37,13 +37,13 @@ const GoogleMapsWidget = () => {
     }, [API_BASE_URL]);
 
     useEffect(() => {
-        if (!mapRef.current || !coordinates || !isLoaded) return;
+        if (!mapInstance || !coordinates || !isLoaded) return;
         const marker = new google.maps.marker.AdvancedMarkerElement({
-            map: mapRef.current,
+            map: mapInstance,
             position: coordinates,
         });
         return () => marker.map = null;
-    }, [coordinates, isLoaded]);
+    }, [coordinates, isLoaded, mapInstance]);
 
     if (error) return <div>{error}</div>
     if (loadError) return <div>Error loading map</div>
@@ -54,7 +54,7 @@ const GoogleMapsWidget = () => {
             mapContainerStyle={mapContainerStyle}
             center={coordinates}
             zoom={15}
-            onLoad={(map) => mapRef.current = map}
+            onLoad={(map) => setMapInstance(map)}
             options={{ mapId: import.meta.env.VITE_GOOGLE_MAPS_ID }}
         />
     );

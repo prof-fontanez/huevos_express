@@ -1,64 +1,63 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
-const itemData = [
+const sections = [
     {
-        img: './hero/IMG-20250421-WA0010.jpg',
-        name: 'Aida, Javier, y Joel',
-        description: 'Esposa y cuñados siempre ayudando en todo.',
+        id: 1,
+        imageUrl: './history/IMG-20250414-WA0061.jpg',
+        text: 'Después de más de 30 años como servidor público, entrego mi uniforme de paramédico y me retiro el 31 de marzo de 2025.',
     },
     {
-        img: './hero/20250419_123150.jpg',
-        name: 'Brent',
-        description: 'Amigo y cliente de Cataño',
+        id: 2,
+        imageUrl: './history/IMG-20250414-WA0063.jpg',
+        text: 'En esos 30 años serví a muchas personas. Hasta tuve la dicha de asistir un parto en la ambulancia.',
     },
     {
-        img: './hero/IMG-20250415-WA0080.jpg',
-        name: 'Jannette Crespo',
-        description: 'Enfermera Escolar JSA',
+        id: 3,
+        imageUrl: './history/IMG-20250413-WA0050.jpg',
+        text: 'A par de meses de mi retiro, se me ocurre una idea para seguir sirviendo a mi gente: vender algún tipo de alimento.',
     },
     {
-        img: './hero/IMG-20250415-WA0081.jpg',
-        name: 'José Colón',
-        description: 'Paramédico Estatal, Manatí',
+        id: 4,
+        imageUrl: './history/IMG-20250413-WA0055.jpg',
+        text: 'Como el desayuno es la comida más importante del día, decidí por vender huevos frescos del país.',
     },
     {
-        img: './hero/IMG-20250416-WA0018.jpg',
-        name: 'Moraima',
-        description: 'Mother and Son Food Truck',
+        id: 5,
+        imageUrl: './history/IMG-20250414-WA0066.jpg',
+        text: 'Buscando lugar donde vender, traté bajo el puente de Sabana Seca primero.',
     },
     {
-        img: './hero/IMG-20250419-WA0018.jpg',
-        name: 'Mayté y César',
-        description: 'El Spot del Colombiano',
+        id: 6,
+        imageUrl: './history/IMG-20250414-WA0073.jpg',
+        text: 'Luego traté frente a la pista de Higuillar en Dorado donde me ejercité corriendo por muchos años, pero no se me dió la suerte.',
     },
     {
-        img: './hero/IMG-20250423-WA0016.jpg',
-        name: 'Nicauris Cristian',
-        description: 'Amigo comerciante',
+        id: 7,
+        imageUrl: './history/IMG-20250414-WA0069.jpg',
+        text: 'Compré mi primer letrero para el carro.',
     },
     {
-        img: './hero/IMG-20250423-WA0021.jpg',
-        name: 'Blás Canino',
-        description: 'Edificios Públicos, Toa Baja',
+        id: 8,
+        imageUrl: './history/IMG-20250414-WA0074.jpg',
+        text: 'Hasta traté vendiendo en Facebook.',
     },
     {
-        img: './hero/IMG-20250423-WA0022.jpg',
-        name: 'Ismael Colón',
-        description: 'Perito Electricista',
+        id: 9,
+        imageUrl: './history/IMG-20250414-WA0065.jpg',
+        text: 'Luego me moví donde estoy actualmente en la carretera 867 en el Barrio Ingenio de Toa Baja.',
     },
     {
-        img: './hero/IMG-20250425-WA0011.jpg',
-        name: 'Solmary Rodríguez',
-        description: 'Tribunal de Bayamón',
+        id: 10,
+        imageUrl: './history/IMG-20250414-WA0081.jpg',
+        text: 'Y al parecer, aquí me quiere Papito Dios para seguir sirviendo a la comunidad. ¡Aquí los esperamos!',
     },
 ];
 
-const SLIDE_DURATION = 3000;
+const SLIDE_DURATION = 5000;
 const FADE_DURATION = 800;
 
-const HeroesGallery = () => {
+const HistoryGallery = () => {
     const theme = useTheme();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [visible, setVisible] = useState(true);
@@ -82,7 +81,7 @@ const HeroesGallery = () => {
         const startSlide = () => {
             setVisible(false);
             setTimeout(() => {
-                setCurrentIndex((prev) => (prev + 1) % itemData.length);
+                setCurrentIndex((prev) => (prev + 1) % sections.length);
                 setVisible(true);
             }, FADE_DURATION);
         };
@@ -103,8 +102,8 @@ const HeroesGallery = () => {
             clearInterval(intervalRef.current);
         };
     }, [hovered]);
-
-    const item = itemData[currentIndex];
+    
+    const section = sections[currentIndex];
 
     return (
         <Box
@@ -119,15 +118,11 @@ const HeroesGallery = () => {
                 alignItems: 'center',
             }}
         >
-            <Typography variant="h4" sx={{ mb: 2 }}>Mis Héroes</Typography>
-            <Typography variant="body2" sx={{ mb: 4, textAlign: 'center' }}>
-                Que sirva esta página como tributo a aquellos que me dieron la mano y
-                siguen ayudándome a realizar ese sueño. Con ustedes, mis héroes.
-            </Typography>
+            <Typography variant="h4" sx={{ mb: 4 }}>Mi Historia</Typography>
 
             {/* Slide counter */}
             <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
-                {currentIndex + 1} / {itemData.length}
+                {currentIndex + 1} / {sections.length}
             </Typography>
 
             {/* Slide container */}
@@ -136,7 +131,6 @@ const HeroesGallery = () => {
                 onMouseLeave={() => setHovered(false)}
                 onTouchStart={() => setHovered(true)}
                 onTouchEnd={() => setHovered(false)}
-
                 sx={{
                     opacity: visible ? 1 : 0,
                     transition: `opacity ${FADE_DURATION}ms ease-in-out`,
@@ -151,21 +145,20 @@ const HeroesGallery = () => {
                     sx={{
                         position: 'relative',
                         width: { xs: '100%', md: '60%' },
-                        height: { xs: 300, sm: 400, md: 500 },
                         borderRadius: 2,
                         overflow: 'hidden',
                     }}
                 >
                     <Box
                         component="img"
-                        src={item.img}
-                        alt={item.name}
+                        src={section.imageUrl}
+                        alt={`Slide ${section.id}`}
                         sx={{
                             width: '100%',
-                            height: '100%',
+                            maxHeight: 400,
                             objectFit: 'cover',
-                            objectPosition: 'center top',
                             display: 'block',
+                            borderRadius: 2,
                         }}
                     />
                     <Box
@@ -175,29 +168,16 @@ const HeroesGallery = () => {
                             left: 0,
                             right: 0,
                             bgcolor: 'rgba(0, 0, 0, 0.5)',
-                            p: { xs: 1.5, sm: 2, md: 3 },
+                            p: 2,
+                            borderBottomLeftRadius: 8,
+                            borderBottomRightRadius: 8,
                         }}
                     >
                         <Typography
                             variant="body1"
-                            sx={{
-                                color: '#ffffff',
-                                textAlign: 'center',
-                                fontWeight: 'bold',
-                                fontSize: { xs: '0.9rem', sm: '1rem', md: '1.25rem' },
-                            }}
+                            sx={{ color: '#ffffff', textAlign: 'center' }}
                         >
-                            {item.name}
-                        </Typography>
-                        <Typography
-                            variant="body2"
-                            sx={{
-                                color: '#eeeeee',
-                                textAlign: 'center',
-                                fontSize: { xs: '0.75rem', sm: '0.875rem', md: '1rem' },
-                            }}
-                        >
-                            {item.description}
+                            {section.text}
                         </Typography>
                     </Box>
                 </Box>
@@ -206,4 +186,4 @@ const HeroesGallery = () => {
     );
 };
 
-export default HeroesGallery;
+export default HistoryGallery;

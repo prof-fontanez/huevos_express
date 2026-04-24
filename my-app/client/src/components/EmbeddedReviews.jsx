@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useBusiness } from '../context/BusinessContext';
 import {
     Box,
     Typography,
@@ -11,32 +12,13 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://huevos-express.onrender.com';
 const LEAVE_REVIEW_URL = `https://search.google.com/local/writereview?placeid=${import.meta.env.VITE_PLACE_ID}`;
 const FADE_DURATION = 300;
 
 const EmbeddedReviews = () => {
-    const [reviews, setReviews] = useState([]);
+    const { reviews, rating, totalReviews, error, loading } = useBusiness();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [visible, setVisible] = useState(true);
-    const [error, setError] = useState(false);
-    const [rating, setRating] = useState(null);
-    const [totalReviews, setTotalReviews] = useState(0);
-
-    useEffect(() => {
-        fetch(`${API_BASE_URL}/business`)
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.reviews && data.reviews.length > 0) {
-                    setReviews(data.reviews);
-                    setRating(data.rating);
-                    setTotalReviews(data.totalReviews);
-                } else {
-                    setError(true);
-                }
-            })
-            .catch(() => setError(true));
-    }, []);
 
     const goTo = (index) => {
         setVisible(false);
@@ -54,6 +36,7 @@ const EmbeddedReviews = () => {
         goTo(currentIndex === reviews.length - 1 ? 0 : currentIndex + 1);
     };
 
+    if (loading) return null;
     if (error || reviews.length === 0) return null;
 
     const review = reviews[currentIndex];

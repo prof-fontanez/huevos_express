@@ -1,26 +1,10 @@
 import { Box, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useBusiness } from '../context/BusinessContext';
 
 function BusinessHours() {
-  const [businessHours, setBusinessHours] = useState([]);
-  const [error, setError] = useState('');
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const { businessHours, loading, error } = useBusiness();
 
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/business`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.businessHours) {
-          setBusinessHours(data.businessHours);
-        } else {
-          setError('Business hours not available');
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching business hours:', error);
-        setError('Failed to fetch business hours');
-      });
-  }, [API_BASE_URL]);
+  if (loading) return null;
 
   return (
     <div>

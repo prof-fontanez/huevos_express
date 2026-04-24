@@ -9,6 +9,7 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import { BusinessProvider } from './context/BusinessContext';
 
 const theme = createTheme({
   palette: {
@@ -50,7 +51,9 @@ root.render(
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <AuthProvider>
-          <App />
+          <BusinessProvider>
+            <App />
+          </BusinessProvider>
         </AuthProvider>
       </BrowserRouter>
     </ThemeProvider>

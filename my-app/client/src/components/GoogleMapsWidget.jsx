@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLoadScript, GoogleMap } from '@react-google-maps/api';
+import { useBusiness } from '../context/BusinessContext';
 
 const mapContainerStyle = {
     width: '100%',
@@ -15,26 +16,8 @@ const GoogleMapsWidget = () => {
         libraries
     });
 
+    const { coordinates, loading, error } = useBusiness();
     const [mapInstance, setMapInstance] = useState(null);
-    const [error, setError] = useState('');
-    const [coordinates, setCoordinates] = useState(null);
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-    useEffect(() => {
-        fetch(`${API_BASE_URL}/business`)
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.coordinates) {
-                    setCoordinates(data.coordinates);
-                } else {
-                    setError('Business address not available');
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                setError('Failed to fetch business address');
-            });
-    }, [API_BASE_URL]);
 
     useEffect(() => {
         if (!mapInstance || !coordinates || !isLoaded) return;
@@ -45,6 +28,7 @@ const GoogleMapsWidget = () => {
         return () => marker.map = null;
     }, [coordinates, isLoaded, mapInstance]);
 
+    if (loading) return null;
     if (error) return <div>{error}</div>
     if (loadError) return <div>Error loading map</div>
     if (!isLoaded || !coordinates) return <div>Loading map...</div>

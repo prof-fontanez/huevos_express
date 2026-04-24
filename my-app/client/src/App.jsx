@@ -9,14 +9,12 @@ import { initGA, logPageView } from "./analytics";
 import MyHeroes from './pages/MyHeroes';
 import { useAuth } from './context/AuthContext';
 
+initGA();
+
 function App() {
 
   const location = useLocation();
   const { auth } = useAuth();
-
-  useEffect(() => {
-    initGA(); // initialize once
-  }, []);
 
   useEffect(() => {
     logPageView(location.pathname + location.search);
@@ -35,6 +33,7 @@ function App() {
           <Route path='/calendar' element={<Activities />} />
           <Route path="/heroes" element={<MyHeroes />} />
           <Route path="/product" element={<Product />} />
+          <Route path="/history" element={<MyHistory />} />
           <Route path="/" element={<MyHistory />} />
         </Route>
       </Routes>

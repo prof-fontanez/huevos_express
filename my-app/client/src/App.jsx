@@ -7,7 +7,7 @@ import Activities from './pages/Activities';
 import { useEffect } from "react";
 import { initGA, logPageView } from "./analytics";
 import MyHeroes from './pages/MyHeroes';
-import { useAuth } from './components/AuthContext';
+import { useAuth } from './context/AuthContext';
 
 function App() {
 

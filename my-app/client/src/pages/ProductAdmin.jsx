@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useAuth } from '../components/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import {
     TextField,
     Button,

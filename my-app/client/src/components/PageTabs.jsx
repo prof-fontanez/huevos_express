@@ -1,6 +1,6 @@
 import { Tabs, Tab } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../components/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 
 const basePages = [

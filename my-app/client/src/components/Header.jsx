@@ -12,7 +12,7 @@ import {
     DialogActions,
     Alert,
 } from '@mui/material';
-import { useAuth } from './AuthContext'; // Adjust path if needed
+import { useAuth } from '../context/AuthContext'; // Adjust path if needed
 import { API_BASE_URL } from '../config';
 
 const LoginDialog = ({ open, onClose }) => {

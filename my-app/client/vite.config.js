@@ -8,7 +8,6 @@ export default defineConfig({
     sitemap({
       hostname: 'https://www.huevosexpresspr.com',
       dynamicRoutes: [
-        '/',
         '/product',
         '/history',
         '/heroes',

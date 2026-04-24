@@ -13,8 +13,7 @@ import {
     InputLabel,
     FormControl,
 } from '@mui/material';
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import { API_BASE_URL } from '../config';
 
 const ProductAdmin = () => {
     const { auth } = useAuth();

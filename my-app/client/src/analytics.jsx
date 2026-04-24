@@ -1,7 +1,7 @@
 import ReactGA from "react-ga4";
 
 export const initGA = () => {
-  console.log("Initializing GA with ID G-94RQYQXZ88");
+  if (import.meta.env.DEV) console.log("Initializing GA with ID G-94RQYQXZ88");
 
   // Set default consent
   window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
@@ -13,12 +13,12 @@ export const initGA = () => {
 
   // Initialize GA4 with debug_mode enabled
   ReactGA.initialize("G-94RQYQXZ88", {
-    debug_mode: true, // <-- Fix: Include debug_mode inside the options object
+    debug_mode: import.meta.env.DEV, // <-- Fix: Include debug_mode inside the options object
   });
 };
 
 export const logPageView = (path) => {
-  console.log("Page view logged: ", path);
+  if (import.meta.env.DEV) console.log("Page view logged: ", path);
   ReactGA.send({
     hitType: "pageview",
     page: path,

@@ -9,14 +9,13 @@ import {
     Alert
 } from '@mui/material';
 import { useAuth } from './AuthContext';
+import { API_BASE_URL } from '../config';
 
 const LoginDialog = ({ open, onClose }) => {
     const { login } = useAuth();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://huevos-express.onrender.com';
 
     const handleSubmit = async () => {
         setError('');

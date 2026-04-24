@@ -1,10 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://huevos-express.onrender.com';
+import { API_BASE_URL } from '../config';
 
 const BusinessContext = createContext(null);
 
 export const BusinessProvider = ({ children }) => {
+    const [businessName, setBusinessName] = useState('');
+    const [businessAddress, setBusinessAddress] = useState('');
     const [businessHours, setBusinessHours] = useState([]);
     const [coordinates, setCoordinates] = useState(null);
     const [reviews, setReviews] = useState([]);
@@ -17,6 +18,8 @@ export const BusinessProvider = ({ children }) => {
         fetch(`${API_BASE_URL}/business`)
             .then((response) => response.json())
             .then((data) => {
+                if (data.businessName) setBusinessName(data.businessName);
+                if (data.businessAddress) setBusinessAddress(data.businessAddress);
                 if (data.businessHours) setBusinessHours(data.businessHours);
                 if (data.coordinates) setCoordinates(data.coordinates);
                 if (data.reviews) setReviews(data.reviews);
@@ -33,6 +36,8 @@ export const BusinessProvider = ({ children }) => {
     return (
         <BusinessContext.Provider value={{
             businessHours,
+            businessName,
+            businessAddress,
             coordinates,
             reviews,
             rating,

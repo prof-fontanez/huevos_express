@@ -23,8 +23,7 @@ import {
 } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import OrderSubmittedDialog from './OrderSubmittedDialog';
-
-
+import { API_BASE_URL } from '../config';
 import emailjs from '@emailjs/browser';
 
 const OrderForm = () => {
@@ -117,17 +116,13 @@ const OrderForm = () => {
             'Zvmp-FaoqlRvuxVVp'
         )
             .then((result) => {
-                console.log('Email sent successfully:', result.text);
-
-                const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
                 // Send SMS notification
-                fetch(`${apiBaseUrl}/api/notify-order`, {
+                fetch(`${API_BASE_URL}/api/notify-order`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ customerName: formData.name }),
                 })
                     .then(res => res.json())
-                    .then(data => console.log('SMS notification sent:', data))
                     .catch(err => console.error('SMS notification failed:', err));
 
                 setConfirmationOpen(true);

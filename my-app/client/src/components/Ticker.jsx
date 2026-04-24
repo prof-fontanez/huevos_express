@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, CircularProgress } from '@mui/material';
+import { API_BASE_URL } from '../config';
 
 const Ticker = () => {
     const [announcements, setAnnouncements] = useState([]);
@@ -8,8 +9,7 @@ const Ticker = () => {
     // Function to fetch announcements from the API
     const fetchAnnouncements = async () => {
         try {
-            const baseUrl = import.meta.env.VITE_API_BASE_URL;
-            const response = await fetch(`${baseUrl}/api/announcements`);
+            const response = await fetch(`${API_BASE_URL}/api/announcements`);
             const data = await response.json();
             setAnnouncements(data.announcements || []);
         } catch (error) {

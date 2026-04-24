@@ -6,6 +6,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -17,13 +18,11 @@ const PR_TIMEZONE = 'America/Puerto_Rico';
 
 // Parse time range and return start and end times
 const parseTimeRange = (timeString) => {
-    console.log('🕐 Parsing time range:', timeString);
     
     // Check if it's a time range (contains " - ")
     const rangeMatch = timeString.match(/(\d{1,2}:\d{2}\s*[AP]M)\s*-\s*(\d{1,2}:\d{2}\s*[AP]M)/i);
     
     if (rangeMatch) {
-        console.log('📊 Found time range:', rangeMatch[1], 'to', rangeMatch[2]);
         return {
             startTime: rangeMatch[1].trim(),
             endTime: rangeMatch[2].trim(),
@@ -32,7 +31,6 @@ const parseTimeRange = (timeString) => {
     }
     
     // Single time (backward compatibility)
-    console.log('⏰ Single time found:', timeString);
     return {
         startTime: timeString.trim(),
         endTime: null,
@@ -63,9 +61,7 @@ const parseTime = (timeStr) => {
 };
 
 // Robust date parsing function compatible with iOS Safari
-const parseEventDateTime = (date, timeString) => {
-    console.log('🔍 Parsing event:', { date, timeString });
-    
+const parseEventDateTime = (date, timeString) => {    
     if (!date || !timeString) {
         console.warn('❌ Missing date or time:', { date, timeString });
         return null;
@@ -78,17 +74,14 @@ const parseEventDateTime = (date, timeString) => {
     let startDateTime = null;
     try {
         const combined = `${date} ${startTime}`;
-        console.log('📅 Strategy 1: Trying dayjs with combined string:', combined);
         
         // Parse as Puerto Rico local time
         let parsed = dayjs.tz(combined, 'YYYY-MM-DD h:mm A', PR_TIMEZONE);
         if (parsed.isValid()) {
-            console.log('✅ Strategy 1a (tz aware) SUCCESS:', parsed.format());
             startDateTime = parsed;
         } else {
             parsed = dayjs.tz(combined, 'YYYY-MM-DD h:mm A', true, PR_TIMEZONE);
             if (parsed.isValid()) {
-                console.log('✅ Strategy 1b (tz strict) SUCCESS:', parsed.format());
                 startDateTime = parsed;
             }
         }
@@ -99,7 +92,6 @@ const parseEventDateTime = (date, timeString) => {
     // Strategy 2: Manual parsing for iOS Safari compatibility (PR timezone)
     if (!startDateTime) {
         try {
-            console.log('🔧 Strategy 2: Trying manual parsing');
             const [year, month, day] = date.split('-').map(num => parseInt(num, 10));
             const startTimeParsed = parseTime(startTime);
             
@@ -109,7 +101,6 @@ const parseEventDateTime = (date, timeString) => {
             }
             
             const { hours, minutes } = startTimeParsed;
-            console.log('🕐 Strategy 2: Parsed components:', { year, month, day, hours, minutes });
             
             // Create date in Puerto Rico timezone
             const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
@@ -118,7 +109,6 @@ const parseEventDateTime = (date, timeString) => {
             const parsed = dayjs.tz(combined, 'YYYY-MM-DD HH:mm:ss', PR_TIMEZONE);
             
             if (parsed.isValid()) {
-                console.log('✅ Strategy 2 (manual PR tz) SUCCESS:', parsed.format());
                 startDateTime = parsed;
             }
         } catch (error) {
@@ -129,7 +119,6 @@ const parseEventDateTime = (date, timeString) => {
     // Strategy 3: ISO-like string with timezone
     if (!startDateTime) {
         try {
-            console.log('📝 Strategy 3: Trying timezone-aware approach');
             const [year, month, day] = date.split('-');
             const startTimeParsed = parseTime(startTime);
             
@@ -137,11 +126,9 @@ const parseEventDateTime = (date, timeString) => {
                 const { hours, minutes } = startTimeParsed;
                 // Create a simple date string and let dayjs.tz handle the timezone
                 const dateStr = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
-                console.log('📝 Strategy 3: Created string:', dateStr);
                 const parsed = dayjs.tz(dateStr, PR_TIMEZONE);
                 
                 if (parsed.isValid()) {
-                    console.log('✅ Strategy 3 (tz aware) SUCCESS:', parsed.format());
                     startDateTime = parsed;
                 }
             }
@@ -158,7 +145,6 @@ const parseEventDateTime = (date, timeString) => {
     // Parse end time if it's a range
     let endDateTime;
     if (isRange && endTime) {
-        console.log('📊 Parsing end time:', endTime);
         
         const [year, month, day] = date.split('-').map(num => parseInt(num, 10));
         const endTimeParsed = parseTime(endTime);
@@ -170,9 +156,7 @@ const parseEventDateTime = (date, timeString) => {
             const combined = `${dateStr} ${timeStr}`;
             endDateTime = dayjs.tz(combined, 'YYYY-MM-DD HH:mm:ss', PR_TIMEZONE);
             
-            if (endDateTime.isValid()) {
-                console.log('✅ End time parsed successfully:', endDateTime.format());
-            } else {
+            if (!endDateTime.isValid()) {
                 console.warn('⚠️ End time parsing failed, using +1 hour default');
                 endDateTime = startDateTime.add(1, 'hour');
             }
@@ -183,7 +167,6 @@ const parseEventDateTime = (date, timeString) => {
     } else {
         // No range specified, default to +1 hour
         endDateTime = startDateTime.add(1, 'hour');
-        console.log('⏰ No end time specified, using +1 hour default');
     }
     
     return {
@@ -198,14 +181,11 @@ const Activities = () => {
 
     const fetchEvents = async () => {
         try {
-            const baseUrl = import.meta.env.VITE_API_BASE_URL;
-            const response = await axios.get(`${baseUrl}/api/events?ts=${Date.now()}`);
+            const response = await axios.get(`${API_BASE_URL}/api/events?ts=${Date.now()}`);
             const data = Array.isArray(response.data.events) ? response.data.events : [];
 
             // Get current time in Puerto Rico timezone
             const now = dayjs().tz(PR_TIMEZONE);
-            console.log('Current PR time:', now.format('YYYY-MM-DD HH:mm:ss'));
-
             const upcoming = data
                 .map((event) => {
                     const parsedDateTime = parseEventDateTime(event.date, event.time);
@@ -239,7 +219,6 @@ const Activities = () => {
                 return acc;
             }, {});
 
-            console.log('Successfully processed events:', Object.keys(grouped).length, 'years with events');
             setGroupedEvents(grouped);
         } catch (error) {
             console.error('Failed to fetch events:', error);

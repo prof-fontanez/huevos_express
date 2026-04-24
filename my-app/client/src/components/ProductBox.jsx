@@ -18,8 +18,8 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { API_BASE_URL } from '../config';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://huevos-express.onrender.com';
 const IS_DEV = import.meta.env.DEV;
 
 const mockProducts = [
@@ -89,8 +89,6 @@ const ProductBox = () => {
 
     useEffect(() => {
         fetchProducts();
-        const interval = setInterval(fetchProducts, 10000);
-        return () => clearInterval(interval);
     }, []);
 
     const maxIndex = Math.max(0, products.length - visibleCount);

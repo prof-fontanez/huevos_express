@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     sitemap({
       hostname: 'https://www.huevosexpresspr.com',
-      routes: [
+      dynamicRoutes: [
         '/',
         '/product',
         '/history',

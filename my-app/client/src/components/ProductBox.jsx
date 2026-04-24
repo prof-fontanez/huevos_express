@@ -6,9 +6,9 @@ import {
     Typography,
     Box,
     Fade,
+    Skeleton,
     Tooltip,
     IconButton,
-    CircularProgress,
     useTheme,
     useMediaQuery,
     Alert,
@@ -18,9 +18,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { API_BASE_URL } from '../config';
-
-const IS_DEV = import.meta.env.DEV;
+import { API_BASE_URL, IS_DEV } from '../config';
 
 const mockProducts = [
     {
@@ -117,12 +115,30 @@ const ProductBox = () => {
 
     if (loading) {
         return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-                <CircularProgress />
+            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+                {[...Array(visibleCount)].map((_, i) => (
+                    <Card
+                        key={i}
+                        sx={{
+                            width: { xs: 280, sm: 300 },
+                            height: 300,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            boxShadow: 3,
+                            p: 2,
+                        }}
+                    >
+                        <Skeleton variant="rectangular" width="100%" height={160} />
+                        <Skeleton variant="text" width="60%" height={32} />
+                        <Skeleton variant="text" width="40%" height={32} />
+                        <Skeleton variant="text" width="80%" height={24} />
+                    </Card>
+                ))}
             </Box>
         );
     }
-
     if (error) {
         return (
             <Box sx={{

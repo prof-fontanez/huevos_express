@@ -54,26 +54,55 @@ const sections = [
     },
 ];
 
-const SLIDE_DURATION = 10000;
+const SLIDE_DURATION = 5000;
 const FADE_DURATION = 800;
 
 const MyHistory = () => {
     const theme = useTheme();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [visible, setVisible] = useState(true);
+    const [hovered, setHovered] = useState(false);
+
+    const intervalRef = React.useRef(null);
+    const remainingRef = React.useRef(SLIDE_DURATION);
+    const lastTickRef = React.useRef(null);
 
     useEffect(() => {
-        const interval = setInterval(() => {
+        if (hovered) {
+            // Pause — save remaining time
+            clearInterval(intervalRef.current);
+            if (lastTickRef.current) {
+                remainingRef.current -= Date.now() - lastTickRef.current;
+            }
+            return;
+        }
+
+        // Resume — start with remaining time then use full duration
+        const startSlide = () => {
             setVisible(false);
             setTimeout(() => {
                 setCurrentIndex((prev) => (prev + 1) % sections.length);
                 setVisible(true);
             }, FADE_DURATION);
-        }, SLIDE_DURATION);
+        };
 
-        return () => clearInterval(interval);
-    }, []);
+        lastTickRef.current = Date.now();
+        const timeout = setTimeout(() => {
+            startSlide();
+            lastTickRef.current = Date.now();
+            remainingRef.current = SLIDE_DURATION;
+            intervalRef.current = setInterval(() => {
+                startSlide();
+                lastTickRef.current = Date.now();
+            }, SLIDE_DURATION);
+        }, remainingRef.current);
 
+        return () => {
+            clearTimeout(timeout);
+            clearInterval(intervalRef.current);
+        };
+    }, [hovered]);
+    
     const section = sections[currentIndex];
 
     return (
@@ -96,6 +125,8 @@ const MyHistory = () => {
 
             {/* Slide container */}
             <Box
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
                 sx={{
                     opacity: visible ? 1 : 0,
                     transition: `opacity ${FADE_DURATION}ms ease-in-out`,
@@ -114,7 +145,6 @@ const MyHistory = () => {
                         overflow: 'hidden',
                     }}
                 >
-                    {/* Image */}
                     <Box
                         component="img"
                         src={section.imageUrl}
@@ -127,8 +157,6 @@ const MyHistory = () => {
                             borderRadius: 2,
                         }}
                     />
-
-                    {/* Text overlay */}
                     <Box
                         sx={{
                             position: 'absolute',

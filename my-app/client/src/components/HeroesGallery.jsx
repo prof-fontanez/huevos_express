@@ -62,18 +62,47 @@ const HeroesGallery = () => {
     const theme = useTheme();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [visible, setVisible] = useState(true);
+    const [hovered, setHovered] = useState(false);
+
+    const intervalRef = React.useRef(null);
+    const remainingRef = React.useRef(SLIDE_DURATION);
+    const lastTickRef = React.useRef(null);
 
     useEffect(() => {
-        const interval = setInterval(() => {
+        if (hovered) {
+            // Pause — save remaining time
+            clearInterval(intervalRef.current);
+            if (lastTickRef.current) {
+                remainingRef.current -= Date.now() - lastTickRef.current;
+            }
+            return;
+        }
+
+        // Resume — start with remaining time then use full duration
+        const startSlide = () => {
             setVisible(false);
             setTimeout(() => {
                 setCurrentIndex((prev) => (prev + 1) % itemData.length);
                 setVisible(true);
             }, FADE_DURATION);
-        }, SLIDE_DURATION);
+        };
 
-        return () => clearInterval(interval);
-    }, []);
+        lastTickRef.current = Date.now();
+        const timeout = setTimeout(() => {
+            startSlide();
+            lastTickRef.current = Date.now();
+            remainingRef.current = SLIDE_DURATION;
+            intervalRef.current = setInterval(() => {
+                startSlide();
+                lastTickRef.current = Date.now();
+            }, SLIDE_DURATION);
+        }, remainingRef.current);
+
+        return () => {
+            clearTimeout(timeout);
+            clearInterval(intervalRef.current);
+        };
+    }, [hovered]);
 
     const item = itemData[currentIndex];
 
@@ -103,6 +132,8 @@ const HeroesGallery = () => {
 
             {/* Slide container */}
             <Box
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
                 sx={{
                     opacity: visible ? 1 : 0,
                     transition: `opacity ${FADE_DURATION}ms ease-in-out`,
@@ -112,7 +143,7 @@ const HeroesGallery = () => {
                     width: '100%',
                 }}
             >
-                {/* Image + overlay container - fixed size, cover fills it */}
+                {/* Image + overlay container */}
                 <Box
                     sx={{
                         position: 'relative',
@@ -122,7 +153,6 @@ const HeroesGallery = () => {
                         overflow: 'hidden',
                     }}
                 >
-                    {/* Image - always fills container */}
                     <Box
                         component="img"
                         src={item.img}
@@ -135,8 +165,6 @@ const HeroesGallery = () => {
                             display: 'block',
                         }}
                     />
-
-                    {/* Text overlay */}
                     <Box
                         sx={{
                             position: 'absolute',

@@ -314,7 +314,7 @@ const OrderForm = () => {
                                     leaveTouchDelay={3000} // Stays open briefly
                                     disableInteractive
                                 >
-                                    <IconButton size="small">
+                                    <IconButton aria-label="más información" size="small">
                                         <InfoOutlinedIcon fontSize="small" />
                                     </IconButton>
                                 </Tooltip>

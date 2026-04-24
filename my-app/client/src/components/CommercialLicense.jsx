@@ -39,7 +39,7 @@ const CommercialLicense = () => {
                 }}
             >
                 <DialogContent sx={{ position: 'relative', p: 0 }}>
-                    <IconButton
+                    <IconButton aria-label="cerrar Certificado de Hacienda"
                         onClick={handleClose}
                         sx={{ position: 'absolute', top: 8, right: 8, color: 'white', zIndex: 1 }}
                     >

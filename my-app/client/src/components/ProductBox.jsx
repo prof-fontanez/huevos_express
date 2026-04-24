@@ -172,13 +172,13 @@ const ProductBox = () => {
             {/* Carousel controls - only show if there are more products than visible */}
             {products.length > visibleCount && (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 2 }}>
-                    <IconButton onClick={handlePrev}>
+                    <IconButton aria-label="producto anterior" onClick={handlePrev}>
                         <ArrowBackIosNewIcon />
                     </IconButton>
-                    <IconButton onClick={() => setPaused((p) => !p)}>
+                    <IconButton aria-label={paused ? "reanudar" : "pausar"} onClick={() => setPaused((p) => !p)}>
                         {paused ? <PlayArrowIcon /> : <PauseIcon />}
                     </IconButton>
-                    <IconButton onClick={handleNext}>
+                    <IconButton aria-label="producto siguiente" onClick={handleNext}>
                         <ArrowForwardIosIcon />
                     </IconButton>
                 </Box>
@@ -267,7 +267,7 @@ const ProductBox = () => {
                                             },
                                         }}
                                     >
-                                        <IconButton size="small">
+                                        <IconButton aria-label="más información" size="small">
                                             <InfoOutlinedIcon fontSize="small" />
                                         </IconButton>
                                     </Tooltip>

@@ -148,10 +148,10 @@ const EmbeddedReviews = () => {
 
                 {/* Navigation controls — fixed at bottom */}
                 <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, flexShrink: 0, mt: 1 }}>
-                    <IconButton onClick={handlePrev} sx={{ color: 'primary.contrastText' }}>
+                    <IconButton aria-label="reseña anterior" onClick={handlePrev} sx={{ color: 'primary.contrastText' }}>
                         <ArrowBackIosNewIcon />
                     </IconButton>
-                    <IconButton onClick={handleNext} sx={{ color: 'primary.contrastText' }}>
+                    <IconButton aria-label="reseña siguiente" onClick={handleNext} sx={{ color: 'primary.contrastText' }}>
                         <ArrowForwardIosIcon />
                     </IconButton>
                 </Box>

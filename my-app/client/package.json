@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.0.1",
-    "vite": "^8.0.8"
+    "vite": "^8.0.8",
+    "vite-plugin-sitemap": "^0.8.2"
   }
 }

@@ -54,7 +54,7 @@ const ProductQrPayment = () => {
                     >
                         <Box
                             component="img"
-                            src="/qr2.png"
+                            src="/qr2.jpg"
                             alt="Código QR de Luis"
                             sx={{ width: 160, height: 160 }}
                         />

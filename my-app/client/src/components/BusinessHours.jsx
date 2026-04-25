@@ -11,13 +11,13 @@ function BusinessHours() {
       <Typography variant="h6">Horario</Typography>
 
       {businessHours.map((item, index) => (
-          <div key={index}>
-            <Box key={index} display="flex" width="100%" justifyContent="space-between">
-              <Typography variant="body2">{item.days}:</Typography>
-              <Typography variant="body2" style={{ textAlign: 'right' }}>{item.hours}</Typography>
-            </Box>
-          </div>
-        ))}
+        <div key={index}>
+          <Box key={index} display="flex" width="100%" gap={4}>
+            <Typography variant="body2" sx={{ flex: 1, textAlign: 'left' }}>{item.days}:</Typography>
+            <Typography variant="body2" sx={{ flex: 1, textAlign: 'right', whiteSpace: 'nowrap' }}>{item.hours}</Typography>
+          </Box>
+        </div>
+      ))}
 
       <Typography variant="body2">Cerramos días feriados</Typography>
     </div>

@@ -13,6 +13,16 @@ const daysOfWeekMap = {
   Sunday: 'Domingo',
 };
 
+const convertTo12h = (timeStr) => {
+  if (!timeStr || timeStr === 'Cerrado') return timeStr;
+  return timeStr.replace(/(\d{1,2}):(\d{2})/g, (match, hours, minutes) => {
+    const h = parseInt(hours);
+    const period = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
+    return `${h12}:${minutes} ${period}`;
+  });
+};
+
 router.get('/', async (req, res) => {
   const PLACE_ID = process.env.PLACE_ID;
   const API_KEY = process.env.GOOGLE_API_KEY;
@@ -40,7 +50,7 @@ router.get('/', async (req, res) => {
       const translated = result.opening_hours.weekday_text.map((line) => {
         const [englishDay, hours] = line.split(': ');
         const spanishDay = daysOfWeekMap[englishDay] || englishDay;
-        return { days: spanishDay, hours };
+        return { days: spanishDay, hours: convertTo12h(hours) };
       });
 
       res.json({

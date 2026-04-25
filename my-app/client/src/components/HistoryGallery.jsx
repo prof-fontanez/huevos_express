@@ -102,7 +102,7 @@ const HistoryGallery = () => {
             clearInterval(intervalRef.current);
         };
     }, [hovered]);
-    
+
     const section = sections[currentIndex];
 
     return (
@@ -183,6 +183,14 @@ const HistoryGallery = () => {
                     </Box>
                 </Box>
             </Box>
+
+            {/* Preload next image */}
+            <Box
+                component="img"
+                src={sections[(currentIndex + 1) % sections.length].imageUrl}
+                alt=""
+                sx={{ display: 'none' }}
+            />
         </Box>
     );
 };

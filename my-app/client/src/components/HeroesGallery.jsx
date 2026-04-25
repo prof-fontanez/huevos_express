@@ -203,6 +203,14 @@ const HeroesGallery = () => {
                     </Box>
                 </Box>
             </Box>
+
+            {/* Preload next image */}
+            <Box
+                component="img"
+                src={itemData[(currentIndex + 1) % itemData.length].img}
+                alt=""
+                sx={{ display: 'none' }}
+            />
         </Box>
     );
 };

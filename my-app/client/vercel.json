@@ -1,9 +1,13 @@
 {
     "rewrites": [
-        { 
-            "source": "/((?!.*\\.(jpg|jpeg|png|gif|svg|ico|webp|js|css|json|txt|xml))(.*))",
-            "destination": "/index.html" 
-        }
+        { "source": "/", "destination": "/index.html" },
+        { "source": "/product", "destination": "/index.html" },
+        { "source": "/history", "destination": "/index.html" },
+        { "source": "/heroes", "destination": "/index.html" },
+        { "source": "/activities", "destination": "/index.html" },
+        { "source": "/admin/products", "destination": "/index.html" },
+        { "source": "/calendar", "destination": "/index.html" },
+        { "source": "/thankyou", "destination": "/index.html" }
     ],
     "headers": [
         {

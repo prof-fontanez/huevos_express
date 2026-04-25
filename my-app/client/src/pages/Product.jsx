@@ -1,4 +1,5 @@
 import {
+    Alert,
     Typography,
     Box
 } from '@mui/material';
@@ -8,8 +9,10 @@ import OrderForm from '../components/OrderForm';
 import GoogleMapsWidget from '../components/GoogleMapsWidget';
 import ProductBox from '../components/ProductBox';
 import ProductQrPayment from '../components/ProductQrPayment';
+import { useBusiness } from '../context/BusinessContext';
 
 const Product = () => {
+    const { error } = useBusiness();
 
     return (
         <Box
@@ -38,20 +41,26 @@ const Product = () => {
                 <ProductQrPayment />
             </Box>
 
-            {/* Business Hours Section */}
-            <Box sx={{ textAlign: 'center', mt: 1 }}>
-                <BusinessHours />
-            </Box>
-
-            {/* Google Maps Section */}
-            <Box sx={{ mt: 1, width: { xs: '100%', md: '50%' } }}>
-                <GoogleMapsWidget />
-            </Box>
-
-            {/* Review Carousel Section */}
-            <Box sx={{ mt: 1, width: '100%' }}>
-                <EmbeddedReviews />
-            </Box>
+            {/* Business section - show once if error, otherwise show all */}
+            {error ? (
+                <Alert severity="warning" sx={{ width: { xs: '100%', sm: '60%' }, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Typography variant="body2" sx={{ alignSelf: 'stretch', width: '100%' }}>
+                        La información del negocio no está disponible en este momento.
+                    </Typography>
+                </Alert>
+            ) : (
+                <>
+                    <Box sx={{ textAlign: 'center', mt: 1 }}>
+                        <BusinessHours />
+                    </Box>
+                    <Box sx={{ mt: 1, width: { xs: '100%', md: '50%' } }}>
+                        <GoogleMapsWidget />
+                    </Box>
+                    <Box sx={{ mt: 1, width: '100%' }}>
+                        <EmbeddedReviews />
+                    </Box>
+                </>
+            )}
         </Box>
     );
 };

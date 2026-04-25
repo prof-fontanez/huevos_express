@@ -16,7 +16,7 @@ const LEAVE_REVIEW_URL = `https://search.google.com/local/writereview?placeid=${
 const FADE_DURATION = 300;
 
 const EmbeddedReviews = () => {
-    const { reviews, rating, totalReviews, error, loading } = useBusiness();
+    const { reviews, rating, totalReviews, loading } = useBusiness();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [visible, setVisible] = useState(true);
 
@@ -37,7 +37,7 @@ const EmbeddedReviews = () => {
     };
 
     if (loading) return null;
-    if (error || reviews.length === 0) return null;
+    if (reviews.length === 0) return null;
 
     const review = reviews[currentIndex];
     const reviewText = review.text;

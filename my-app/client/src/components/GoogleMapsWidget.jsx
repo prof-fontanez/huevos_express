@@ -16,7 +16,7 @@ const GoogleMapsWidget = () => {
         libraries
     });
 
-    const { coordinates, loading, error } = useBusiness();
+    const { coordinates, loading } = useBusiness();
     const [mapInstance, setMapInstance] = useState(null);
 
     useEffect(() => {
@@ -29,9 +29,8 @@ const GoogleMapsWidget = () => {
     }, [coordinates, isLoaded, mapInstance]);
 
     if (loading) return null;
-    if (error) return <div>{error}</div>
-    if (loadError) return <div>Error loading map</div>
-    if (!isLoaded || !coordinates) return <div>Loading map...</div>
+    if (loadError) return null;
+    if (!isLoaded || !coordinates) return null;
 
     return (
         <GoogleMap

@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+# Huevos Express PR — Client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React frontend for Huevos Express PR, a local egg delivery business in Toa Baja, Puerto Rico.
+
+## Tech Stack
+
+- **React 18** with Vite
+- **Material UI (MUI)** for UI components
+- **React Router v7** for client-side routing
+- **@react-google-maps/api** for Google Maps integration
+- **PWA** support with service worker
 
 ## Available Scripts
 
-In the project directory, you can run:
-
 ### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Runs the app in development mode at [http://localhost:3000](http://localhost:3000).
 
 ### `npm run build`
+Builds the app for production to the `dist` folder.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### `npm run preview`
+Previews the production build locally.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Environment Variables
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Create a `.env` file in the client folder with the following variables:
+VITE_API_BASE_URL=your_backend_url
+VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+VITE_GOOGLE_MAPS_ID=your_google_maps_id
+VITE_PLACE_ID=your_google_place_id
 
-### `npm run eject`
+## Project Structure
+src/
+├── components/      # Reusable UI components
+├── context/         # React context providers (Auth, Business)
+├── pages/           # Page components
+├── config.js        # Shared configuration (API base URL, etc.)
+└── index.jsx        # App entry point
+## Features
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Product carousel with responsive layout
+- Google Maps with custom marker
+- Google Reviews widget
+- Business hours in Spanish (12h format)
+- Mi Historia and Mis Héroes slideshows with pause on hover/touch
+- Order form with email and SMS notifications
+- PWA — installable on mobile devices
+- Error boundaries for graceful error handling
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Deployment
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Deployed on **Vercel**. The backend API is hosted separately on **Render**.

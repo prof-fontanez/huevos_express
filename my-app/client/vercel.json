@@ -1,11 +1,7 @@
 {
+    "cleanUrls": true,
+    "trailingSlash": false,
     "rewrites": [
-        { "source": "/(.*)\\.jpg", "destination": "/$1.jpg" },
-        { "source": "/(.*)\\.png", "destination": "/$1.png" },
-        { "source": "/(.*)\\.gif", "destination": "/$1.gif" },
-        { "source": "/(.*)\\.svg", "destination": "/$1.svg" },
-        { "source": "/(.*)\\.ico", "destination": "/$1.ico" },
-        { "source": "/(.*)\\.webp", "destination": "/$1.webp" },
         { "source": "/(.*)", "destination": "/index.html" }
     ],
     "headers": [

@@ -1,25 +1,15 @@
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import MyHistory from './pages/MyHistory';
 import Product from './pages/Product';
 import Layout from './components/Layout';
 import ProductAdmin from './pages/ProductAdmin';
 import Activities from './pages/Activities';
-import { useEffect } from "react";
-import { initGA, logPageView } from "./analytics";
 import MyHeroes from './pages/MyHeroes';
 import { useAuth } from './context/AuthContext';
 
-initGA();
-
 function App() {
 
-  const location = useLocation();
   const { auth } = useAuth();
-
-  useEffect(() => {
-    logPageView(location.pathname + location.search);
-  }, [location]);
-
 
   return (
     <>

@@ -1,13 +1,12 @@
 {
     "rewrites": [
-        { "source": "/", "destination": "/index.html" },
-        { "source": "/product", "destination": "/index.html" },
-        { "source": "/history", "destination": "/index.html" },
-        { "source": "/heroes", "destination": "/index.html" },
-        { "source": "/activities", "destination": "/index.html" },
-        { "source": "/admin/products", "destination": "/index.html" },
-        { "source": "/calendar", "destination": "/index.html" },
-        { "source": "/thankyou", "destination": "/index.html" }
+        { "source": "/(.*)\\.jpg", "destination": "/$1.jpg" },
+        { "source": "/(.*)\\.png", "destination": "/$1.png" },
+        { "source": "/(.*)\\.gif", "destination": "/$1.gif" },
+        { "source": "/(.*)\\.svg", "destination": "/$1.svg" },
+        { "source": "/(.*)\\.ico", "destination": "/$1.ico" },
+        { "source": "/(.*)\\.webp", "destination": "/$1.webp" },
+        { "source": "/(.*)", "destination": "/index.html" }
     ],
     "headers": [
         {

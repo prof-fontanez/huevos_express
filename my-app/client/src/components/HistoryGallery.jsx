@@ -153,6 +153,7 @@ const HistoryGallery = () => {
                         component="img"
                         src={section.imageUrl}
                         alt={`Slide ${section.id}`}
+                        loading="lazy"
                         sx={{
                             width: '100%',
                             maxHeight: 400,

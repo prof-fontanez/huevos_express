@@ -25,7 +25,7 @@ const GoogleMapsWidget = () => {
             map: mapInstance,
             position: coordinates,
         });
-        return () => marker.map = null;
+        return () => { if (marker) marker.map = null; };
     }, [coordinates, isLoaded, mapInstance]);
 
     if (loading) return null;

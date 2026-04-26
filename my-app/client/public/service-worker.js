@@ -1,4 +1,4 @@
-const CACHE_NAME = 'huevos-express-v1';
+const CACHE_NAME = `huevos-express-${typeof __BUILD_TIME__ !== 'undefined' ? __BUILD_TIME__ : 'dev'}`;
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
@@ -30,6 +30,10 @@ self.addEventListener('activate', (event) => {
         })
     );
     self.clients.claim();
+    // Force all clients to reload with new service worker
+    self.clients.matchAll({ type: 'window' }).then(clients => {
+        clients.forEach(client => client.navigate(client.url));
+    });
 });
 
 // Fetch — serve from cache, fall back to network

@@ -13,7 +13,15 @@ const EventCard = ({ event }) => {
         event.activity || event.location
     )}&dates=${startDateTime.format('YYYYMMDDTHHmmss')}/${endDateTime.format('YYYYMMDDTHHmmss')}&details=${encodeURIComponent(
         event.activity ? `Actividad: ${event.activity}` : event.location
-    )}&location=${encodeURIComponent(event.location)}&ctz=${PR_TIMEZONE}`;
+    )}&location=${encodeURIComponent(
+        event.location
+    )}&ctz=${
+        PR_TIMEZONE
+    }&recur=RRULE:FREQ%3D${
+        event.interval
+    };INTERVAL%3D1;COUNT%3D${
+        event.recurring_count
+    }`;
 
     return (
         <Box

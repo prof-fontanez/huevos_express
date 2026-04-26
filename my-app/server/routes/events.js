@@ -8,7 +8,7 @@ const expandRecurringEvents = (event) => {
     const { date, time, activity, location, recurring, recurring_count, interval } = event;
 
     if (recurring !== 'Y' || !recurring_count || recurring_count <= 0 || !interval) {
-        return [{ date, time, activity, location }];
+        return [{ date, time, activity, location, recurring_count, interval }];
     }
 
     const events = [];
@@ -20,6 +20,8 @@ const expandRecurringEvents = (event) => {
             time,
             activity,
             location,
+            interval,
+            recurring_count: recurring_count - i,
         });
 
         switch (interval.toUpperCase()) {

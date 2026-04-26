@@ -1,19 +1,16 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import {
-    TextField,
-    Button,
     Card,
     CardContent,
     Typography,
     Grid,
     CircularProgress,
-    MenuItem,
-    Select,
-    InputLabel,
-    FormControl,
 } from '@mui/material';
 import { API_BASE_URL } from '../config';
+import ProductSelector from '../components/ProductSelector';
+import ProductForm from '../components/ProductForm';
+import ProductFormActions from '../components/ProductFormActions';
 
 const ProductAdmin = () => {
     const { auth } = useAuth();
@@ -27,6 +24,8 @@ const ProductAdmin = () => {
         description: '',
         price: '',
         image_url: '',
+        has_tooltip: false,
+        tooltip_msg: '',
     });
 
     const getAuthHeaders = useCallback(() => ({
@@ -58,7 +57,7 @@ const ProductAdmin = () => {
 
     useEffect(() => {
         if (selectedId === 'new') {
-            setForm({ title: '', description: '', price: '', image_url: '' });
+            setForm({ title: '', description: '', price: '', image_url: '', has_tooltip: false, tooltip_msg: '' });
         } else {
             const prod = products.find((p) => p.id === selectedId);
             if (prod) {
@@ -67,6 +66,8 @@ const ProductAdmin = () => {
                     description: prod.description || '',
                     price: prod.price || '',
                     image_url: prod.image_url || '',
+                    has_tooltip: prod.has_tooltip || false,
+                    tooltip_msg: prod.tooltip_msg || '',
                 });
             }
         }
@@ -83,6 +84,8 @@ const ProductAdmin = () => {
             description: form.description,
             price: form.price,
             image_url: form.image_url,
+            has_tooltip: form.has_tooltip,
+            tooltip_msg: form.tooltip_msg,
         };
 
         try {
@@ -103,7 +106,7 @@ const ProductAdmin = () => {
                 alert(selectedId === 'new' ? 'Product created!' : 'Product updated!');
                 await fetchProducts();
                 setSelectedId('new');
-                setForm({ title: '', description: '', price: '', image_url: '' });
+                setForm({ title: '', description: '', price: '', image_url: '', has_tooltip: false, tooltip_msg: '' });
             } else {
                 alert('Save failed.');
             }
@@ -130,7 +133,7 @@ const ProductAdmin = () => {
                 alert('Product deleted!');
                 await fetchProducts();
                 setSelectedId('new');
-                setForm({ title: '', description: '', price: '', image_url: '' });
+                setForm({ title: '', description: '', price: '', image_url: '', has_tooltip: false, tooltip_msg: '' });
             } else {
                 alert('Delete failed.');
             }
@@ -140,7 +143,7 @@ const ProductAdmin = () => {
         }
     };
 
-    if (!auth) return null; // wait for auth context
+    if (!auth) return null;
     if (!auth?.token || !auth?.isAdmin) {
         return (
             <Grid container justifyContent="center" sx={{ mt: 4 }}>
@@ -162,76 +165,23 @@ const ProductAdmin = () => {
                             Product Administration
                         </Typography>
 
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel id="product-select-label">Select Product</InputLabel>
-                            <Select
-                                labelId="product-select-label"
-                                value={selectedId}
-                                onChange={(e) => setSelectedId(e.target.value)}
-                            >
-                                <MenuItem value="new">
-                                    <em>-- New Product --</em>
-                                </MenuItem>
-                                {products.map((product) => (
-                                    <MenuItem key={product.id} value={product.id}>
-                                        {`ID ${product.id} - ${product.title}`}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-
-                        <TextField
-                            label="Title"
-                            fullWidth
-                            margin="normal"
-                            value={form.title}
-                            onChange={(e) => handleInputChange('title', e.target.value)}
-                        />
-                        <TextField
-                            label="Description"
-                            fullWidth
-                            margin="normal"
-                            multiline
-                            rows={3}
-                            value={form.description}
-                            onChange={(e) => handleInputChange('description', e.target.value)}
-                        />
-                        <TextField
-                            label="Price"
-                            fullWidth
-                            margin="normal"
-                            value={form.price}
-                            onChange={(e) => handleInputChange('price', e.target.value)}
-                        />
-                        <TextField
-                            label="Image URL"
-                            fullWidth
-                            margin="normal"
-                            value={form.image_url}
-                            onChange={(e) => handleInputChange('image_url', e.target.value)}
+                        <ProductSelector
+                            products={products}
+                            selectedId={selectedId}
+                            onChange={setSelectedId}
                         />
 
-                        <Button
-                            variant="contained"
-                            fullWidth
-                            onClick={handleSave}
-                            disabled={saving}
-                            sx={{ mt: 2 }}
-                        >
-                            {saving ? 'Saving...' : selectedId === 'new' ? 'Create Product' : 'Save Changes'}
-                        </Button>
+                        <ProductForm
+                            form={form}
+                            onChange={handleInputChange}
+                        />
 
-                        {selectedId !== 'new' && (
-                            <Button
-                                variant="outlined"
-                                color="error"
-                                fullWidth
-                                onClick={handleDelete}
-                                sx={{ mt: 1 }}
-                            >
-                                Delete Product
-                            </Button>
-                        )}
+                        <ProductFormActions
+                            selectedId={selectedId}
+                            saving={saving}
+                            onSave={handleSave}
+                            onDelete={handleDelete}
+                        />
                     </CardContent>
                 </Card>
             </Grid>

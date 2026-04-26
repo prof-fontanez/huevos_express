@@ -10,10 +10,10 @@ const EventCard = ({ event }) => {
     const displayTime = `${formattedTimeStart} - ${formattedTimeEnd}`;
 
     const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-        event.description
+        event.activity || event.location
     )}&dates=${startDateTime.format('YYYYMMDDTHHmmss')}/${endDateTime.format('YYYYMMDDTHHmmss')}&details=${encodeURIComponent(
-        `Actividad programada: ${event.description}`
-    )}&location=${encodeURIComponent(event.description)}&ctz=${PR_TIMEZONE}`;
+        event.activity ? `Actividad: ${event.activity}` : event.location
+    )}&location=${encodeURIComponent(event.location)}&ctz=${PR_TIMEZONE}`;
 
     return (
         <Box
@@ -78,11 +78,15 @@ const EventCard = ({ event }) => {
                     </Box>
                 </Box>
             </Box>
-
             {/* Description + Calendar Button */}
             <Box sx={{ flex: 1, pr: 3 }}>
-                <Typography variant="body1" sx={{ fontWeight: 500, mb: 1 }}>
-                    {event.description}
+                {event.activity && (
+                    <Typography variant="body1" sx={{ fontWeight: 700, mb: 0.5 }}>
+                        {event.activity}
+                    </Typography>
+                )}
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                    {event.location}
                 </Typography>
                 <Button
                     variant="outlined"

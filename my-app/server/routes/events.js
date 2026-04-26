@@ -5,11 +5,10 @@ import dayjs from 'dayjs';
 const router = express.Router();
 
 const expandRecurringEvents = (event) => {
-    const { date, time, description, recurring, recurring_count, interval } = event;
+    const { date, time, activity, location, recurring, recurring_count, interval } = event;
 
-    // Not recurring or invalid — return as single event
     if (recurring !== 'Y' || !recurring_count || recurring_count <= 0 || !interval) {
-        return [{ date, time, description }];
+        return [{ date, time, activity, location }];
     }
 
     const events = [];
@@ -19,10 +18,10 @@ const expandRecurringEvents = (event) => {
         events.push({
             date: currentDate.format('YYYY-MM-DD'),
             time,
-            description,
+            activity,
+            location,
         });
 
-        // Advance to next occurrence
         switch (interval.toUpperCase()) {
             case 'DAILY':
                 currentDate = currentDate.add(1, 'day');
@@ -34,7 +33,6 @@ const expandRecurringEvents = (event) => {
                 currentDate = currentDate.add(1, 'month');
                 break;
             default:
-                // Unknown interval — stop expanding
                 i = recurring_count;
         }
     }
@@ -47,7 +45,7 @@ router.get('/', async (req, res) => {
         const sheets = await getSheetsClient();
 
         const spreadsheetId = '1_mHzDxZghiIUDjPw1MIBu9VbZE0qj9nPm7aiUMjCagg';
-        const range = 'eventos!A2:F'; // Extended to column F to include new columns
+        const range = 'eventos!A2:G';
 
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId,
@@ -58,11 +56,12 @@ router.get('/', async (req, res) => {
 
         const events = rows
             .filter(row => row.length >= 3)
-            .flatMap(([date, time, description, recurring = 'N', recurring_count = '0', interval = '']) => {
+            .flatMap(([date, time, activity = '', location, recurring = 'N', recurring_count = '0', interval = '']) => {
                 return expandRecurringEvents({
                     date,
                     time,
-                    description,
+                    activity,
+                    location,
                     recurring: recurring.trim().toUpperCase(),
                     recurring_count: parseInt(recurring_count, 10) || 0,
                     interval: interval.trim().toUpperCase(),

@@ -15,6 +15,17 @@ router.get('/', async (req, res) => {
     }
 });
 
+// ✅ GET /api/products-with-price — Fetch products with prices
+router.get('/products-with-price', async (req, res) => {
+    try {
+        const [rows] = await db.execute('SELECT * FROM products WHERE price != \'\'');
+        res.json(rows);
+    } catch (error) {
+        console.error('Error fetching products with prices:', error.message, error.stack);
+        res.status(500).json({ success: false, message: 'Database error' });
+    }
+});
+
 router.get('/test-connection', async (req, res) => {
     try {
         const [rows] = await db.execute('SELECT 1 + 1 AS result');

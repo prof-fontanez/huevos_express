@@ -5,15 +5,11 @@
     {
       "src": "logo3.png",
       "sizes": "192x192 512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ],
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#A0522D",
-  "background_color": "#FFF8DC",
-  "description": "Venta de huevos del país. Frescos diariamente de la granja a tu casa.",
-  "orientation": "portrait",
-  "scope": "/"
+  "background_color": "#FFF8DC"
 }

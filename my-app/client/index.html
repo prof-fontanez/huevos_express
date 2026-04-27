@@ -72,14 +72,6 @@
     })
   </script>
 
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(registrations => {
-        registrations.forEach(reg => reg.unregister());
-      });
-    }
-  </script>
-
   <script type="module" src="/src/index.jsx"></script>
 
 

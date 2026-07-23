@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
     Box,
-    Typography,
     FormControl,
     InputLabel,
     Select,
@@ -10,11 +9,13 @@ import {
     CircularProgress,
 } from '@mui/material';
 import { API_BASE_URL } from '../config';
+import CheckoutDialog from './CheckoutDialog';
 
 const ProductPayment = () => {
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState('');
     const [loading, setLoading] = useState(true);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/api/products/products-with-price`)
@@ -25,8 +26,11 @@ const ProductPayment = () => {
     }, []);
 
     const handlePayment = () => {
-        // Placeholder — SumUp integration will go here
-        alert(`Procesando pago para: ${selectedProduct.title} - ${selectedProduct.price}`);
+        setDialogOpen(true);
+    };
+
+    const handleClose = () => {
+        setDialogOpen(false);
     };
 
     if (loading) return <CircularProgress size={24} />;
@@ -38,7 +42,9 @@ const ProductPayment = () => {
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: 2,
+                minWidth: 250,
                 width: { xs: '100%', sm: '60%', md: '40%' },
+                margin: '0 auto',
             }}
         >
             <FormControl fullWidth>
@@ -48,7 +54,6 @@ const ProductPayment = () => {
                     value={selectedProduct}
                     label="Seleccione un producto"
                     onChange={(e) => setSelectedProduct(e.target.value)}
-                    sx={{ minWidth: 250 }}
                 >
                     {products.map((product) => (
                         <MenuItem key={product.id} value={product}>
@@ -66,6 +71,12 @@ const ProductPayment = () => {
             >
                 Pagar
             </Button>
+
+            <CheckoutDialog
+                open={dialogOpen}
+                onClose={handleClose}
+                product={selectedProduct}
+            />
         </Box>
     );
 };

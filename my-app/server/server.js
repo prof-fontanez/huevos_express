@@ -9,6 +9,7 @@ import announcementsRouter from './routes/announcements.js';
 import notifyRouter from './routes/notifications.js';
 import eventsRouter from './routes/events.js';
 import Telnyx from 'telnyx';
+import paymentsRouter from './routes/payments.js';
 
 // ✅ Load environment variables early (only in development)
 if (process.env.NODE_ENV !== 'production') {
@@ -25,6 +26,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use('/api/payments', paymentsRouter);
 
 // ✅ Telnyx initialization
 const telnyx = Telnyx(process.env.TELNYX_API_KEY);

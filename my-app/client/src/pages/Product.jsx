@@ -8,7 +8,7 @@ import BusinessHours from '../components/BusinessHours';
 import OrderForm from '../components/OrderForm';
 import GoogleMapsWidget from '../components/GoogleMapsWidget';
 import ProductBox from '../components/ProductBox';
-import ProductQrPayment from '../components/ProductQrPayment';
+import ProductPayment from '../components/ProductPayment';
 import { useBusiness } from '../context/BusinessContext';
 
 const Product = () => {
@@ -38,7 +38,7 @@ const Product = () => {
             {/* QR Payment Section */}
             <Box sx={{ textAlign: 'center', mt: 1 }}>
                 <Typography variant="h6" sx={{ textAlign: 'center' }}>Pague Aquí</Typography>
-                <ProductQrPayment />
+                <ProductPayment />
             </Box>
 
             {/* Business section - show once if error, otherwise show all */}

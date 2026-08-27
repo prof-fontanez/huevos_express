@@ -48,7 +48,7 @@ All rights reserved. This software is the proprietary property of Hector Fontane
 
 
 ## Project Structure
-
+```text
 src/
 ├── components/ # Reusable UI components
 │ ├── BusinessAddress.jsx
@@ -86,7 +86,7 @@ src/
 │ └── eventUtils.js
 ├── config.js # Shared configuration (API base URL, IS_DEV)
 └── index.jsx # App entry point
-
+```
 
 ## Features
 

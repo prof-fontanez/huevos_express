@@ -5,10 +5,12 @@ import { test, expect, Page, Locator } from '@playwright/test';
 // ---------------------------------------------------------------------------
 
 // TODO: path of the product page that has the "FORMA DE PEDIDO" button
-const PRODUCT_PAGE = '/';
+const PRODUCT_PAGE = '/product';
 
 // TODO: accessible names (labels) of the quantity dropdowns
-const QUANTITY_LABELS = { plato: 'Plato', caja: 'Caja' } as const;
+const TIPO_LABEL = 'Tipo';
+const CANTIDAD_LABEL = 'Cantidad';
+const TIPO_OPTIONS = { plato: 'Platos', caja: 'Caja' } as const;
 
 const TEST_MESSAGE = 'Mensaje de prueba';
 
@@ -18,10 +20,10 @@ const FIELD_LABELS = {
   negocio: 'Nombre del negocio',
   direccion: 'Dirección',
   pueblo: 'Pueblo',
-  codigoPostal: 'Código postal',
+  codigoPostal: 'Código Postal',
   telefono: 'Teléfono',
   correo: 'Correo electrónico',
-  mensaje: 'Mensaje',
+  mensaje: 'Mensaje (opcional)',
 } as const;
 
 const VALID = {
@@ -53,7 +55,7 @@ const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // Matches "Nombre" and "Nombre *" but not "Nombre del negocio"
 const field = (page: Page, key: FieldKey) =>
-  page.getByLabel(new RegExp(`^${escapeRegex(FIELD_LABELS[key])}\\s*\\*?$`));
+  page.getByLabel(new RegExp(`^${escapeRegex(FIELD_LABELS[key])}\\s*\\*?$`, 'i'));
 
 // The form counts as "open" while its ORDENAR button is visible.
 const ordenar = (page: Page) => page.getByRole('button', { name: 'ORDENAR' });
@@ -81,17 +83,38 @@ async function isNativeSelect(dropdown: Locator) {
   return (await dropdown.evaluate((el) => el.tagName)) === 'SELECT';
 }
 
+const dropdown = (page: Page, label: string) =>
+  page.getByRole('combobox', { name: new RegExp(`^${escapeRegex(label)}\\b`, 'i') });
+
+const optionName = (value: string) =>
+  new RegExp(`^\\s*${escapeRegex(value)}\\b`, 'i');
+
 async function dropdownOptions(page: Page, label: string): Promise<string[]> {
-  const dropdown = page.getByLabel(label);
-  if (await isNativeSelect(dropdown)) {
-    return (await dropdown.locator('option').allTextContents()).map((t) => t.trim());
+  const dd = dropdown(page, label);
+  let texts: string[];
+  if (await isNativeSelect(dd)) {
+    texts = await dd.locator('option').allTextContents();
+  } else {
+    await dd.click();
+    const options = page.getByRole('option');
+    texts = await options.allTextContents();
+    await options.first().click(); // closes the menu
   }
-  // Custom dropdown (e.g. MUI): open it, read the options, then pick one to close it.
-  await dropdown.click();
-  const options = page.getByRole('option');
-  const texts = (await options.allTextContents()).map((t) => t.trim());
-  await options.first().click();
-  return texts;
+  return texts.map((t) => t.trim());
+}
+
+async function selectFromDropdown(page: Page, label: string, value: string) {
+  const dd = dropdown(page, label);
+  if (await isNativeSelect(dd)) {
+    const texts = await dd.locator('option').allTextContents();
+    const match = texts.find((t) => optionName(value).test(t.trim()));
+    await dd.selectOption({ label: match?.trim() ?? value });
+    await expect(dd.locator('option:checked')).toHaveText(optionName(value));
+  } else {
+    await dd.click();
+    await page.getByRole('option', { name: optionName(value) }).click();
+    await expect(dd).toContainText(optionName(value));
+  }
 }
 
 async function selectQuantity(page: Page, label: string, value: string) {
@@ -118,10 +141,11 @@ const QUANTITY_RULES = [
 ] as const;
 
 for (const rule of QUANTITY_RULES) {
-  const label = QUANTITY_LABELS[rule.product];
-
   test.describe(`Quantity: ${rule.product}`, () => {
-    test.beforeEach(async ({ page }) => openOrderForm(page));
+    test.beforeEach(async ({ page }) => {
+      await openOrderForm(page);
+      await selectFromDropdown(page, TIPO_LABEL, TIPO_OPTIONS[rule.product]);
+    });
 
     const selectable = [
       [rule.ids.min, rule.min],
@@ -130,7 +154,7 @@ for (const rule of QUANTITY_RULES) {
     ] as const;
     for (const [id, n] of selectable) {
       test(`${id} ${n} can be selected`, async ({ page }) => {
-        await selectQuantity(page, label, String(n));
+        await selectFromDropdown(page, CANTIDAD_LABEL, String(n));
       });
     }
 
@@ -140,9 +164,11 @@ for (const rule of QUANTITY_RULES) {
     ] as const;
     for (const [id, n] of notOffered) {
       test(`${id} ${n} is not offered`, async ({ page }) => {
-        const options = await dropdownOptions(page, label);
-        expect(options.length).toBeGreaterThan(0); // guard against a vacuous pass
-        expect(options).not.toContain(String(n));
+        const numbers = (await dropdownOptions(page, CANTIDAD_LABEL))
+          .map((t) => t.match(/^\s*(\d+)/)?.[1])
+          .filter((x): x is string => !!x);
+        expect(numbers.length).toBeGreaterThan(0); // guard against a vacuous pass
+        expect(numbers).not.toContain(String(n));
       });
     }
   });

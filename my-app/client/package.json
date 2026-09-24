@@ -28,7 +28,8 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "playwright test"
   },
   "proxy": "http://localhost:5000",
   "eslintConfig": {
@@ -50,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@vitejs/plugin-react": "^6.0.1",
     "vite": "^8.0.8",
     "vite-plugin-sitemap": "^0.8.2"

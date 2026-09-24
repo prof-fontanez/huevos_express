@@ -25,3 +25,7 @@ yarn-error.log*
 
 # never commit .env file as it contains secrets
 **/.env
+
+test-results/
+playwright-report/
+playwright/.cache/

@@ -21,5 +21,8 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:5000'
     }
+  },
+  test: {
+    exclude: ['e2e/**', 'node_modules/**'],
   }
 })
